@@ -1,4 +1,4 @@
-import m from "../../Mitrhil.js";
+import m from "../../Mithril.js";
 
 const RomajiProposalView : any = {
     oncreate(vnode : any) {

@@ -1,5 +1,5 @@
 import TouchHandler from "../../touched/TouchHandler.js";
-import m from "../ui/Mitrhil.js";
+import m from "../ui/Mithril.js";
 
 export default class GameInput {
 
