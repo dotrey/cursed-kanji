@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-06-02
+- Added `ObjectStorage` for easy save and load of classes
+
 ## 2020-06-01
 - Added file structures for books and index
 - Added loading of index files

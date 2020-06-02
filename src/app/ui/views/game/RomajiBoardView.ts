@@ -16,7 +16,7 @@ const RomajiBoardView : any = {
 
     buildVocalPanel() {
         const keys : string[] = [
-            "a", "e", "i", "o", "u"
+            "a", "i", "u", "e", "o"
         ];
         return m(".romajiboard-scrollrow",
             m(".romajiboard-panel", {

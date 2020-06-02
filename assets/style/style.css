@@ -182,7 +182,7 @@ body {
 .container.library .library-book-group-title {
     position: relative;
     display: inline-block;
-    padding: 0;
+    padding: 0.25em 0;
     margin: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -195,7 +195,7 @@ body {
     display: inline-block;
     width: 1px;
     height: 1px;
-    vertical-align: top;
+    vertical-align: text-top;
     margin-right: 1.5em;
     visibility: hidden;
     font-size: inherit;
@@ -241,7 +241,7 @@ body {
     position: relative;
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 0.5em;
+    padding: 0.2em 0;
     margin-top: 0.25em;
     border-left: 0.5em solid transparent;
 }
@@ -252,8 +252,8 @@ body {
 
 .container.library .library-book-title {
     position: relative;
-    display: inline-block;
-    padding: 0;
+    display: block;
+    padding: 0.5em;
     margin: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -266,7 +266,7 @@ body {
     display: inline-block;
     width: 1px;
     height: 1px;
-    vertical-align: top;
+    vertical-align: text-top;
     margin-right: 1.5em;
     visibility: hidden;
     font-size: inherit;

@@ -3,12 +3,27 @@ import LibraryIndexLoader from "./files/LibraryIndexLoader.js";
 import LibraryBook from "./LibraryBook.js";
 import LibraryBookLoader from "./files/LibraryBookLoader.js";
 import LibraryIndexBookFileStructure from "./files/LibraryIndexBookFileStructure.js";
+import ObjectStorage from "../../storage/ObjectStorage.js";
 
 export default class Library {
     index : LibraryIndex;
     books : {[index : string] : LibraryBook} = {};
 
     private enabledBooks : string[] = [];
+    private storage : ObjectStorage;
+
+    constructor() {
+        this.storage = new ObjectStorage(
+            this, [
+                {
+                    name : "enabledBooks",
+                    type : "array",
+                    defaultValue : []
+                }
+            ]
+        )
+        this.storage.load();
+    }
 
     async loadIndex() : Promise<boolean> {
         this.index = await (new LibraryIndexLoader()).load();
@@ -29,6 +44,7 @@ export default class Library {
         if (this.enabledBooks.indexOf(id) < 0) {
             this.enabledBooks.push(id);
         }
+        this.storage.save()
     }
 
     disableBook(id : string) {
@@ -36,6 +52,7 @@ export default class Library {
         if (i > -1) {
             this.enabledBooks.splice(i, 1);
         }
+        this.storage.save()
     }
 
     isBookEnabled(id : string) {
@@ -43,15 +60,21 @@ export default class Library {
     }
 
     enableBookGroup(group : string) {
+        this.storage.canSave = false;
         for (let bookId of this.index.booksOfGroup(group)) {
             this.enableBook(bookId);
         }
+        this.storage.canSave = true;
+        this.storage.save();
     }
 
     disableBookGroup(group : string) {
+        this.storage.canSave = false;
         for (let bookId of this.index.booksOfGroup(group)) {
             this.disableBook(bookId);
         }
+        this.storage.canSave = true;
+        this.storage.save();
     }
 
     isBookGroupEnabled(group : string) {
