@@ -39,19 +39,19 @@
                         hue = (hue + value.charCodeAt(i) * i) % 360;
                         break;
                     case 1:
-                        lightness = (lightness + value.charCodeAt(i) * i) % 100;
+                        lightness = (lightness + value.charCodeAt(i) * i) % 50;
                         break;
                     case 2:
-                        saturation = (saturation + value.charCodeAt(i) * i) % 100;
+                        saturation = (saturation + value.charCodeAt(i) * i) % 50;
                         break;
                 }
             }
 
-            // clamp lightness between 20% and 70%
-            lightness = Math.max(20, Math.min(70, lightness));
+            // lightness can vary from 20% to 70%
+            lightness += 20;
 
-            // clamp saturation between 50% and 100%
-            saturation = Math.max(50, Math.min(100, saturation));
+            // saturation can vary from 50% to 100%
+            saturation += 50;
 
             var hsl = "hsl(" + hue + ", " + saturation + "%, " + lightness + "%)";
             var rgb = hslToRgb(hue / 360, saturation / 100, lightness / 100);
