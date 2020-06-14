@@ -2,13 +2,17 @@
     "name": "cursed-kanji",
     "version": "0.1.0",
     "scripts": {
-        "test" : "ts-mocha -p ./tsconfig.mocha.json src/**/*.spec.ts"
+        "test": "ts-mocha -p ./tsconfig.mocha.json src/**/*.spec.ts",
+        "bundle": "npm run bundle-css",
+        "bundle-css": "postcss ./assets/style/style.css -o ./assets/style/style.bundle.css"
     },
     "devDependencies": {
         "@types/chai": "*",
         "@types/mocha": "*",
         "chai": "*",
         "mocha": "*",
+        "postcss-cli": "^7.1.1",
+        "postcss-import": "^12.0.1",
         "rollup": "^2.8",
         "ts-mocha": "7.0.0",
         "ts-node": "*",

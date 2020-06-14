@@ -1,5 +1,5 @@
 export default class LibraryWord {
-    id: string[] = []; 
+    id: string = ""; 
     romaji: string[] = []; 
     reading: { 
         on: string[]; 

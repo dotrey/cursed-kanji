@@ -2,7 +2,7 @@ import m from "../../Mithril.js";
 
 const RomajiProposalView : any = {
     oncreate(vnode : any) {
-        vnode.attrs.input.registerRomajiProposal("game-romaji-proposal");
+        vnode.attrs.game.input.registerRomajiProposal("game-romaji-proposal");
     },
 
     view(vnode : any) {
@@ -29,7 +29,7 @@ const RomajiProposalView : any = {
                         vnode.dom.style.fontSize = currentSize + "%";
                     }
                 }
-            }, vnode.attrs.input.proposedText),
+            }, vnode.attrs.game.status.proposedText),
 
             m(".romaji-proposal-undo", m.trust("&larr;")),
             m(".romaji-proposal-clear", m.trust("&times;"))

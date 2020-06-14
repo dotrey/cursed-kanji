@@ -2,7 +2,7 @@ import m from "../../Mithril.js";
 
 const RomajiBoardView : any = {
     oncreate(vnode : any) {
-        vnode.attrs.input.registerRomajiBoard("game-romajiboard");
+        vnode.attrs.game.input.registerRomajiBoard("game-romajiboard");
     },
 
     view() {

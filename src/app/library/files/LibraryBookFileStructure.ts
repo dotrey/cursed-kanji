@@ -17,9 +17,10 @@ export default interface LibraryBookFileStructure {
         /**
          * The ids of the characters forming the word, which are the unicodes 
          * in hex of the symbols. If the unicode has less than 5 characters, it
-         * will be left-padded with 0.
+         * will be left-padded with 0. If there are multiple characters in the
+         * word, the unicodes are separated by semicolons
          */
-        id : string[];
+        id : string;
 
         /**
          * The romaji (transcription with latin characters) of the word. There can

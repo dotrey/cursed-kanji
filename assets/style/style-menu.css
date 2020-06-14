@@ -1,0 +1,93 @@
+.container.main {
+    display: grid;
+    grid-template-columns: 15% 70% 15%;
+    grid-template-rows: 10% 1fr 1em 3em 1em 3em 10%;
+    grid-template-areas: 
+        ". . settings"
+        ". library ."
+        ". . . "
+        ". gamelength ."
+        ". . ."
+        ". gamestart ."
+        ". . ."
+    ;
+    font-size: 6vw;
+}
+
+.container.main .library {
+    position: relative;
+    grid-area: library;
+    justify-self: stretch;
+    align-self: stretch;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.container.main .library-shelf-button {
+    position: absolute;
+    left: 0.5em;
+    bottom: 0.5em;
+    right: 0.5em;
+    text-align: center;
+    height: 1.5em;
+    line-height: 1.9;
+    background: rgba(242, 242, 242, 0.8);
+}
+
+.container.main .library-shelf {
+    position: absolute;
+    box-sizing: border-box;
+    left: 0.5em;
+    right: 0.5em;
+    top: 0.5em;
+    bottom: 0.5em;
+    overflow: hidden;
+    border: 0.2em solid #72350d;
+    border-bottom: 0;
+    background-color: #361906;
+    background: repeating-linear-gradient(#331805, #361906 2.6em, #72350d 2.6em, #72350d 2.8em);
+
+    --book-width: 0.5em;
+    --book-height: 2em;
+    --book-height-variance: 0.5em;
+    --shelf-height: 2.6em;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--book-width),1fr));
+    grid-auto-rows: 2.8em;
+    grid-auto-flow: row;
+    justify-content: start;
+
+}
+
+.container.main .library-shelf-book {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    width: var(--book-width);
+    height: var(--shelf-height);
+}
+
+.container.main .library-shelf-book>div {
+    position: absolute;
+    width: 100%;
+    height: var(--book-height);
+    bottom: 0;
+    content: " ";
+    border: 0.5px solid #140319;
+    background-color: transparent;
+}
+
+.container.main .game-length {
+    position: relative;
+    grid-area: gamelength;
+    text-align: center;
+    background: rgba(242, 242, 242, 0.5);
+}
+
+.container.main .game-start {
+    position: relative;
+    grid-area: gamestart;
+    text-align: center;
+    background: rgba(242, 242, 242, 0.5);
+    line-height: 3em;
+}

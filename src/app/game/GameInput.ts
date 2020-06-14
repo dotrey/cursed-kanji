@@ -5,6 +5,7 @@ export default class GameInput {
 
     proposedText : string = "";
     private maxTextLength : number = 24;
+    private changeListeners : ((proposedText : string) => void)[] = [];
 
     registerRomajiProposal(id : string) {
         let romajiProposal : HTMLElement = document.getElementById(id);
@@ -136,15 +137,37 @@ export default class GameInput {
             return;
         }
         this.proposedText += key;
+        this.notifyChangeListeners();
     }
 
-    private clearProposal() {
+    clearProposal() {
         this.proposedText = "";
+        this.notifyChangeListeners();
     }
 
     private undoPropose() {
         if (this.proposedText.length) {
             this.proposedText = this.proposedText.substr(0, this.proposedText.length - 1);
+            this.notifyChangeListeners();
+        }
+    }
+
+    private notifyChangeListeners() {
+        for(const listener of this.changeListeners) {
+            listener(this.proposedText);
+        }
+    }
+
+    attach(callback : (proposedText : string) => void) {
+        if (this.changeListeners.indexOf(callback) < 0) {
+            this.changeListeners.push(callback);
+        }
+    }
+
+    detach(callback : (proposedText : string) => void) {
+        const i : number = this.changeListeners.indexOf(callback);
+        if (i > -1) {
+            this.changeListeners.splice(i, 1);
         }
     }
 }
