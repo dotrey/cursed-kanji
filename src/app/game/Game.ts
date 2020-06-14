@@ -4,6 +4,8 @@ import SimpleLoop from "./SimpleLoop.js";
 import StateMachine from "./states/StateMachine.js";
 import InitialState from "./states/InitialState.js";
 import { render } from "../ui/views/GameView.js";
+import WordPool from "../library/WordPool.js";
+import LibraryWord from "../library/LibraryWord.js";
 
 export default class Game {
 
@@ -11,8 +13,10 @@ export default class Game {
     status : GameStatus;
     loop : SimpleLoop;
     stateMachine : StateMachine;
+    wordPool : WordPool
 
-    constructor() {
+    constructor(wordPool : WordPool) {
+        this.wordPool = wordPool;
         this.setup();
     }
 
@@ -37,12 +41,27 @@ export default class Game {
         });
     }
 
+    nextWord() {
+        this.wordPool.next().then((word : LibraryWord) => {
+
+        });
+    }
+
+    checkProposal(proposedText : string) {
+        if (!this.wordPool.current()) {
+            return false;
+        }
+        return this.wordPool.current().romaji.indexOf(proposedText) > -1;
+    }
+
     start() {
-        this.loop.start();
+        this.wordPool.fill().then(() => {
+            this.loop.start();
+        });
     }
 
     stop() {
         this.loop.stop();
-        // todo: reset
+        this.stateMachine.setState(new InitialState());
     }
 }

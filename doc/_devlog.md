@@ -4,6 +4,8 @@
 - Split CSS into separate files and added `postCSS` for bundling
 - Added simple game loop based on a state machine
 - Changed word's id back to string
+- Added `WordPool` as provider of words
+- Wired everything up for a working version
 
 ## 2020-06-02
 - Added `ObjectStorage` for easy save and load of classes

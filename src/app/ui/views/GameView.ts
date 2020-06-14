@@ -8,6 +8,10 @@ const GameView : any = {
         vnode.attrs.game.start();
     },
 
+    onremove(vnode : any) {
+        vnode.attrs.game.stop();
+    },
+
     view(vnode : any) {
         return m(".container.game", {
 
