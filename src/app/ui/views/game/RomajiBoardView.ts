@@ -32,16 +32,16 @@ const RomajiBoardView : any = {
     buildConsonantPanel() {
         const panels : string[][] = [
             [
-                "k", "s", "t", "n", "h",
+                "k", "s", "t", "c", "h",
             ],
             [
-                "m", "y", "r", "w", "c"
+                "n", "f", "m", "y", "r"
             ],
             [
-                "g", "d", "b", "p", "y"
+                "w", "g", "d", "b", "p"
             ],
             [
-                "z", "j", "c", "h", ""
+                "y", "z", "j", "c", "h"
             ]
         ];
         return m(".romajiboard-scrollrow", {

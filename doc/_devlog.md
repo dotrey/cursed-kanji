@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-06-16
+- Added dynamic scaling to the kanji card
+
 ## 2020-06-14
 - Split CSS into separate files and added `postCSS` for bundling
 - Added simple game loop based on a state machine
