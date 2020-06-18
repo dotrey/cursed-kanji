@@ -17,7 +17,7 @@ export default class WordPool {
      */
     async fill() : Promise<boolean> {
         this.pool.length = 0;
-        let wordIdIndexMap : {[index : string] : number}= {};
+        let wordIdIndexMap : {[index : string] : number} = {};
         for(const bookId of this.library.enabledBookIds()) {
             const book = await this.library.getBook(bookId);
             
@@ -62,8 +62,22 @@ export default class WordPool {
                 }
             }
         }
-        console.log(this.pool);
+        if (!this.pool.length) {
+            // no active books
+            // -> place one filler and redirect to main
+            let word = new LibraryWord();
+            word.id = "7121";
+            this.pool.push(word);
+            window.location.hash = "!/";
+        }
         return true;
+    }
+
+    clear() {
+        this.pool.length = 0;
+        this.activeWord = null;
+        this.correctWords.length = 0;
+        this.wrongWords.length = 0;
     }
 
     /**

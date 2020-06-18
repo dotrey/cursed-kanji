@@ -6,6 +6,7 @@ import InitialState from "./states/InitialState.js";
 import { render } from "../ui/views/GameView.js";
 import WordPool from "../library/WordPool.js";
 import LibraryWord from "../library/LibraryWord.js";
+import Settings from "./Settings.js";
 
 export default class Game {
 
@@ -13,7 +14,8 @@ export default class Game {
     status : GameStatus;
     loop : SimpleLoop;
     stateMachine : StateMachine;
-    wordPool : WordPool
+    wordPool : WordPool;
+    settings : Settings;
 
     constructor(wordPool : WordPool) {
         this.wordPool = wordPool;
@@ -41,20 +43,8 @@ export default class Game {
         });
     }
 
-    nextWord() {
-        this.wordPool.next().then((word : LibraryWord) => {
-
-        });
-    }
-
-    checkProposal(proposedText : string) {
-        if (!this.wordPool.current()) {
-            return false;
-        }
-        return this.wordPool.current().romaji.indexOf(proposedText) > -1;
-    }
-
     start() {
+        this.wordPool.clear();
         this.wordPool.fill().then(() => {
             this.loop.start();
         });

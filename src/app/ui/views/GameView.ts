@@ -16,9 +16,16 @@ const GameView : any = {
         return m(".container.game", {
 
         }, [
-            m(KanjiCardView, { game : vnode.attrs.game }),
-            m(RomajiProposalView, { game : vnode.attrs.game }),
-            m(RomajiBoardView, { game : vnode.attrs.game })
+            m(KanjiCardView, { 
+                game : vnode.attrs.game 
+            }),
+            m(RomajiProposalView, { 
+                game : vnode.attrs.game 
+            }),
+            m(RomajiBoardView, { 
+                game : vnode.attrs.game, 
+                settings : vnode.attrs.settings
+            })
         ]);
     }
 }

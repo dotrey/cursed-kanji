@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-06-18
+- Added settings and different keyboard layouts
+
 ## 2020-06-16
 - Added dynamic scaling to the kanji card
 

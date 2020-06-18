@@ -4,6 +4,7 @@ import CursedKanji from "../../CursedKanji.js";
 import GameView from "./views/GameView.js";
 import MainView from "./views/MainView.js";
 import LibraryView from "./views/LibraryView.js";
+import SettingsView from "./views/SettingsView.js";
 
 export default class Ui {
     constructor(private cursed : CursedKanji) {
@@ -20,6 +21,13 @@ export default class Ui {
                     });
                 }
             },
+            "/settings" : {
+                render : function() {
+                    return m(SettingsView, {
+                        settings : me.cursed.settings
+                    });
+                }
+            },
             "/library" : {
                 render : function() {
                     return m(LibraryView, {
@@ -30,7 +38,8 @@ export default class Ui {
             "/game" : {
                 render : function() {
                     return m(GameView, {
-                        game : me.cursed.game
+                        game : me.cursed.game,
+                        settings : me.cursed.settings
                     });
                 }
             },

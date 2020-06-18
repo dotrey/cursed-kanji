@@ -14,6 +14,41 @@
     font-size: 6vw;
 }
 
+.container.main .settings-button {
+    position: relative;
+    grid-area: settings;
+    justify-self: center;
+    align-self: center;
+    width: 2em;
+    height: 2em;
+    box-sizing: border-box;
+    border: 0.5em solid transparent;
+    overflow: hidden;
+}
+
+.container.main .settings-button::before {
+    position: absolute;
+    content: "";
+    display: block;
+    border: 0.25em solid #fff;
+    top: 0;
+    left: -0.25em;
+    bottom: 0;
+    right: -0.25em;
+}
+
+.container.main .settings-button::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 2em;
+    height: 0.25em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+}
+
 .container.main .library {
     position: relative;
     grid-area: library;

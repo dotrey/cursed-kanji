@@ -11,10 +11,19 @@ const MainView : any = {
 
     view(vnode : any) {
         return m(".container.main", [
+            this.buildSettingsButton(),
             this.buildLibrary(vnode),
             this.buildGameLength(),
             this.buildGameStart()
         ]);
+    },
+
+    buildSettingsButton() {
+        return m(".settings-button", {
+            onclick : () => {
+                window.location.hash = "#!/settings";
+            }
+        });
     },
 
     buildLibrary(vnode : any) {

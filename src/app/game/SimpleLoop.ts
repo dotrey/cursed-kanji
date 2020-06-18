@@ -44,7 +44,7 @@ export default class SimpleLoop {
         // get the time since the last update
         const deltaT : number = ts - (this.engine.lastTs || ts);
 
-        if (this.engine.updating) {
+        if (this.engine.updating && this.engine.running) {
             for(const listener of this.updateListeners) {
                 listener(ts, deltaT);
             }
