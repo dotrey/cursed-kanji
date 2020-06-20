@@ -24,6 +24,7 @@ export default class KanjiState extends StateMachineState {
                 kanji += "&#x" + t + ";";
             }
             game.status.kanji = kanji;
+            game.status.word = word;
         });
     }
 

@@ -32,11 +32,22 @@
 .container.game .kanjicard-timer {
     position: absolute;
     display: none;
-    bottom: 1em;
+    top: 1em;
     right: 1em;
     text-align: right;
     font-size: calc(var(--key-size) / 4);
     opacity: 0.8;
+}
+
+.container.game .kanjicard-details {
+    position: absolute;
+    display: none;
+    bottom: 0.5em;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 75%;
+    color: #878787;
 }
 
 .container.game .kanjicard.phase-init {
@@ -46,7 +57,8 @@
 /* .container.game .kanjicard.phase-kanji {
 } */
 
-.container.game .kanjicard.phase-kanji .kanjicard-timer {
+.container.game .kanjicard.phase-kanji .kanjicard-timer,
+.container.game .kanjicard.phase-kanji .kanjicard-details {
     display: block;
 }
 
@@ -115,8 +127,145 @@
         background: rgba(255, 255, 255, 0);
         opacity: 0;
         transform: scale(1.5);
-        color: #fff;
+        color: #ffffff;
     }
+}
+
+/* KANJI DETAIL */
+
+.container.game .kanjidetail {
+    position: absolute;
+    top: 20%;
+    left: 0.5em;
+    right: 0.5em;
+    bottom: 0;
+    z-index: 0;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 0.5em 0.5em 0 0;
+    padding: 1em;
+    overflow: auto;
+    transition: all 0.5s ease;
+}
+
+.container.game .kanjidetail.hidden {
+    top: 100%;
+    visibility: hidden;
+}
+
+.container.game .kanjidetail::before {
+    position: fixed;
+    display: block;
+    content: "";
+    z-index: -1;
+    top: -0.5em;
+    right: -0.5em;
+    left: -0.5em;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.container.game .kanjidetail-close {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 16vw;
+    height: 16vw;
+    line-height: 16vw;
+    font-size: 8vw;
+    text-align: center;
+    color: #666666;
+}
+
+.container.game .kanjidetail-grid {
+    position: relative;
+    width: 85vw;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 60vw 5vw 20vw;
+    grid-template-rows: 60vw 1em auto 1em auto auto 1em auto;
+    grid-template-areas: 
+        "symbol . symbols"
+        "s1 s1 s1"
+        "word word word"
+        "s2 s2 s2"
+        "on on on"
+        "kun kun kun"
+        "s3 s3 s3"
+        "meaning meaning meaning"
+    ;
+}
+
+.container.game .kanjidetail-spacer {
+    position: relative;
+    width: 50vw;
+    height: 1px;
+    justify-self: center;
+    align-self: center;
+    background: linear-gradient(90deg, transparent 0%, #eeeeee 50%, transparent 100%);
+}
+
+.container.game .kanjidetail-spacer.s1 {
+    grid-area: s1;
+}
+
+.container.game .kanjidetail-spacer.s2 {
+    grid-area: s2;
+}
+
+.container.game .kanjidetail-spacer.s3 {
+    grid-area: s3;
+}
+
+.container.game .kanjidetail-symbol {
+    position: relative;
+    grid-area: symbol;
+    justify-self: stretch;
+    align-self: stretch;
+    border: 1px solid #eeeeee;
+}
+
+.container.game .kanjidetail-symbols {
+    position: relative;
+    grid-area: symbols;
+    justify-self: stretch;
+    align-self: stretch;
+    border: 1px solid #eeeeee;
+}
+
+.container.game .kanjidetail-text {
+    position: relative;
+    justify-self: stretch;
+    align-self: stretch;
+    padding: 0.5em 0;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.container.game .kanjidetail-text>b {
+    font-size: 90%;
+}
+
+.container.game .kanjidetail-text.word {
+    grid-area: word;
+    text-align: center;
+}
+
+.container.game .kanjidetail-text.reading-on {
+    grid-area: on;
+}
+
+.container.game .kanjidetail-text.reading-kun {
+    grid-area: kun;
+}
+
+.container.game .kanjidetail-text.meaning {
+    grid-area: meaning;
+    font-size: 90%;
+}
+
+.container.game .kanjidetail-text.meaning>b {
+    font-size: inherit;
 }
 
 /* ROMAJI BOARD */

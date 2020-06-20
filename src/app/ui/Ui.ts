@@ -35,9 +35,10 @@ export default class Ui {
                     });
                 }
             },
-            "/game" : {
-                render : function() {
+            "/game:overlay..." : {
+                render : function(vnode : any) {
                     return m(GameView, {
+                        overlay : vnode.attrs.overlay,
                         game : me.cursed.game,
                         settings : me.cursed.settings
                     });

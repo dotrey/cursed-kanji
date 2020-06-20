@@ -30,7 +30,7 @@
     position: absolute;
     content: "";
     display: block;
-    border: 0.25em solid #fff;
+    border: 0.2em solid #fff;
     top: 0;
     left: -0.25em;
     bottom: 0;
@@ -42,7 +42,7 @@
     content: "";
     display: block;
     width: 2em;
-    height: 0.25em;
+    height: 0.2em;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

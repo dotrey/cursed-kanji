@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-06-20
+- Added detail view for single kanji
+
 ## 2020-06-18
 - Added settings and different keyboard layouts
 

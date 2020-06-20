@@ -1,3 +1,5 @@
+import LibraryWord from "../library/LibraryWord";
+
 export default class GameStatus {
     // The current phase of the game:
     // init -> not started
@@ -12,7 +14,7 @@ export default class GameStatus {
     // The kanji shown (actually, this can contain multiple symbols)
     kanji : string = "";
     // The word object 
-
+    word : LibraryWord;
 
     // Each kanji will be shown for at max timelimit seconds
     timelimit : number = 0;

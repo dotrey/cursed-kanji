@@ -9,7 +9,11 @@ const KanjiCardView = {
         if (seconds.indexOf(".") < 0) {
             seconds += ".0";
         }
-        return m(".kanjicard.phase-" + phase, [
+        return m(".kanjicard.phase-" + phase, {            
+            onclick : () => {
+                window.location.hash = "#!/game/detail";
+            }
+        }, [
             m(".kanjicard-word", {
                 onupdate : function(vnode : any) {
                     if (vnode.dom.innerText !== KanjiCardView.lastKanji) {
@@ -22,7 +26,8 @@ const KanjiCardView = {
                     }
                 }
             }, m.trust(vnode.attrs.game.status.kanji)),
-            m(".kanjicard-timer", seconds)
+            m(".kanjicard-timer", seconds),
+            m(".kanjicard-details", "tap for details")
         ]);
     }
 };

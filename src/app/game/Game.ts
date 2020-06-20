@@ -54,4 +54,12 @@ export default class Game {
         this.loop.stop();
         this.stateMachine.setState(new InitialState());
     }
+
+    pause() {
+        this.loop.pause();
+    }
+
+    resume() {
+        this.loop.resume();
+    }
 }
