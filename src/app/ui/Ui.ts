@@ -5,13 +5,18 @@ import GameView from "./views/GameView.js";
 import MainView from "./views/MainView.js";
 import LibraryView from "./views/LibraryView.js";
 import SettingsView from "./views/SettingsView.js";
+import SvgLoader from "./SvgLoader.js";
 
 export default class Ui {
+    private svgLoader : SvgLoader;
+
     constructor(private cursed : CursedKanji) {
         this.setup();
     }
 
     private setup() {
+        this.svgLoader = new SvgLoader();
+
         let me = this;
         m.route(document.body, "/", {
             "/" : {
@@ -40,7 +45,8 @@ export default class Ui {
                     return m(GameView, {
                         overlay : vnode.attrs.overlay,
                         game : me.cursed.game,
-                        settings : me.cursed.settings
+                        settings : me.cursed.settings,
+                        svgloader : me.svgLoader
                     });
                 }
             },

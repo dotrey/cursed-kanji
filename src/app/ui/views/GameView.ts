@@ -49,6 +49,7 @@ const GameView : any = {
             }),
             m(KanjiDetailView, {
                 game : vnode.attrs.game,
+                svgloader : vnode.attrs.svgloader,
                 hidden : !this.detailOverlay
             })
         ]);

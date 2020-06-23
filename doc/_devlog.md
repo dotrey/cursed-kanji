@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-06-23
+- Added kanji vg for detail view
+
 ## 2020-06-20
 - Added detail view for single kanji
 

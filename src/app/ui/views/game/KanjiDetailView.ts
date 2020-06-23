@@ -3,6 +3,18 @@ import LibraryWord from "../../../library/LibraryWord.js";
 
 
 const KanjiDetailView = {
+    lastKanjiVG : <string> "",
+    
+    onupdate(vnode : any) {
+        if (!vnode.attrs.game || !vnode.attrs.game.status.word) {
+            return;
+        }
+        let word = vnode.attrs.game.status.word as LibraryWord;
+        if (word.id !== KanjiDetailView.lastKanjiVG) {
+            vnode.attrs.svgloader.loadInto(word.id, document.getElementById("kanjidetail-svg"));
+            KanjiDetailView.lastKanjiVG = word.id;
+        }
+    },
 
     view(vnode : any) {
         let word = vnode.attrs.game.status.word as LibraryWord;
@@ -17,7 +29,11 @@ const KanjiDetailView = {
                 }
             }, m.trust("&#x2715;")),
             m(".kanjidetail-grid", [
-                m(".kanjidetail-symbol"),
+                m("svg.kanjidetail-symbol", {
+                    xmlns : "http://www.w3.org/2000/svg",
+                    viewBox : "0 0 109 109",
+                    id : "kanjidetail-svg"
+                }),
                 m(".kanjidetail-symbols"),
                 m(".kanjidetail-spacer.s1"),
                 this.buildWord(word),
