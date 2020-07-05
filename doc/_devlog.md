@@ -4,6 +4,7 @@
 - Added option to select single symbol for detail view
 - Added vivus.js for animated svgs
 - Added back button to game view
+- Added `robots.txt` with deny all
 
 ## 2020-06-23
 - Added kanji vg for detail view
