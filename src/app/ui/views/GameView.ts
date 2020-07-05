@@ -37,6 +37,11 @@ const GameView : any = {
         return m(".container.game", {
 
         }, [
+            m(".game-back-button", {
+                onclick : function() {
+                    window.history.back();
+                }
+            }),
             m(KanjiCardView, { 
                 game : vnode.attrs.game 
             }),
