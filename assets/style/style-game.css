@@ -231,6 +231,27 @@
     justify-self: stretch;
     align-self: stretch;
     border: 1px solid #eeeeee;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: auto;
+}
+
+.container.game .kanjidetail-symbols>span {
+    position: relative;
+    display: inline-block;
+    height: 16vw;
+    line-height: 14vw;
+    text-align: center;
+    font-size: 125%;
+    box-sizing: border-box;
+    border: 1vw solid transparent
+}
+
+.container.game .kanjidetail-symbols>span.selected {
+    border-color: #828dff;
 }
 
 .container.game .kanjidetail-text {

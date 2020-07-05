@@ -1,19 +1,15 @@
 import m from "../../Mithril.js"
 import LibraryWord from "../../../library/LibraryWord.js";
+import SvgLoader from "../../SvgLoader.js";
 
 
 const KanjiDetailView = {
     lastKanjiVG : <string> "",
+    kanjiSymbols : <string[]> [],
+    svgLoader : <SvgLoader> null,
     
-    onupdate(vnode : any) {
-        if (!vnode.attrs.game || !vnode.attrs.game.status.word) {
-            return;
-        }
-        let word = vnode.attrs.game.status.word as LibraryWord;
-        if (word.id !== KanjiDetailView.lastKanjiVG) {
-            vnode.attrs.svgloader.loadInto(word.id, document.getElementById("kanjidetail-svg"));
-            KanjiDetailView.lastKanjiVG = word.id;
-        }
+    oncreate(vnode : any) {
+        KanjiDetailView.svgLoader = vnode.attrs.svgLoader;
     },
 
     view(vnode : any) {
@@ -34,7 +30,7 @@ const KanjiDetailView = {
                     viewBox : "0 0 109 109",
                     id : "kanjidetail-svg"
                 }),
-                m(".kanjidetail-symbols"),
+                this.buildSymbols(word),
                 m(".kanjidetail-spacer.s1"),
                 this.buildWord(word),
                 m(".kanjidetail-spacer.s2"),
@@ -44,6 +40,39 @@ const KanjiDetailView = {
                 this.buildMeaning(word)
             ])
         ]);
+    },
+
+    buildSymbols(word : LibraryWord) {
+        let me = this;
+        this.kanjiSymbols = word.id.split(";");
+        return m(".kanjidetail-symbols", {
+            onupdate : function(vnode : any) {
+                if (vnode.dom.getAttribute("data-word-id") !== word.id && vnode.dom.firstElementChild) {
+                    me.selectSymbol(vnode.dom.firstElementChild, me.kanjiSymbols[0]);
+                    vnode.dom.setAttribute("data-word-id", word.id);
+                    console.log("new word");
+                }
+            }
+        },[
+            this.kanjiSymbols.map((symbol : string) => {
+                return m("span", {
+                    onclick : function() {
+                        me.selectSymbol(this, symbol);
+                    }
+                }, m.trust("&#x" + symbol + ";"));
+            })
+        ]);
+    },
+
+    selectSymbol(element : HTMLElement, symbolId : string) {
+        if (symbolId !== this.lastKanjiVG) {
+            this.svgLoader.loadInto(symbolId, document.getElementById("kanjidetail-svg") as unknown as SVGElement);
+            this.lastKanjiVG = symbolId;
+            element.parentElement.querySelectorAll("span").forEach((e) => {
+                e.classList.remove("selected");
+            });
+            element.classList.add("selected");
+        }
     },
 
     buildWord(word : LibraryWord) {

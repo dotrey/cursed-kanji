@@ -46,7 +46,7 @@ export default class Ui {
                         overlay : vnode.attrs.overlay,
                         game : me.cursed.game,
                         settings : me.cursed.settings,
-                        svgloader : me.svgLoader
+                        svgLoader : me.svgLoader
                     });
                 }
             },

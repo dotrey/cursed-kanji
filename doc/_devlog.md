@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-07-05
+- Added option to select single symbol for detail view
+
 ## 2020-06-23
 - Added kanji vg for detail view
 
