@@ -2,6 +2,7 @@
 
 ## 2020-07-05
 - Added option to select single symbol for detail view
+- Added vivus.js for animated svgs
 
 ## 2020-06-23
 - Added kanji vg for detail view

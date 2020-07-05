@@ -225,6 +225,10 @@
     border: 1px solid #eeeeee;
 }
 
+.container.game .kanjidetail-symbol.hide-stroke-order g[id*="strokenumbers" i]{
+    display: none;
+}
+
 .container.game .kanjidetail-symbols {
     position: relative;
     grid-area: symbols;

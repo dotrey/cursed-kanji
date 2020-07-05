@@ -1,0 +1,2 @@
+# TODO
+- [ ] For vivus.js, the animation duration is set as number of frames. Since the FPS of Chrome are tied to the refresh rate of the monitor, this might cause the animation to play too fast on devices with e.g. 144Hz monitors. -> Add coarse FPS detection to SimpleLoop so the animation duration can be adjusted

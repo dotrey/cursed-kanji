@@ -1,6 +1,7 @@
 import m from "../../Mithril.js"
 import LibraryWord from "../../../library/LibraryWord.js";
 import SvgLoader from "../../SvgLoader.js";
+import Vivus from "../../Vivus.js";
 
 
 const KanjiDetailView = {
@@ -28,7 +29,24 @@ const KanjiDetailView = {
                 m("svg.kanjidetail-symbol", {
                     xmlns : "http://www.w3.org/2000/svg",
                     viewBox : "0 0 109 109",
-                    id : "kanjidetail-svg"
+                    id : "kanjidetail-svg",
+                    onclick : function() {
+                        if (this.classList.contains("hide-stroke-order")) {
+                            return;
+                        }
+                        this.classList.add("hide-stroke-order");
+                        new Vivus(this, {
+                            type : "oneByOne",
+                            start : "autostart",
+                            // duration is set in frames!
+                            // -> could be slow on old devices and too fast on 144Hz monitors
+                            // Todo: add
+                            duration : 180,
+                            selfDestroy : true
+                        }, () => {                            
+                            this.classList.remove("hide-stroke-order");
+                        })
+                    }
                 }),
                 this.buildSymbols(word),
                 m(".kanjidetail-spacer.s1"),
@@ -50,7 +68,6 @@ const KanjiDetailView = {
                 if (vnode.dom.getAttribute("data-word-id") !== word.id && vnode.dom.firstElementChild) {
                     me.selectSymbol(vnode.dom.firstElementChild, me.kanjiSymbols[0]);
                     vnode.dom.setAttribute("data-word-id", word.id);
-                    console.log("new word");
                 }
             }
         },[
