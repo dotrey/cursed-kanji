@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-07-07
+- Added dedicated `gh-pages` branch for optimized website version with bundles js and css files
+
 ## 2020-07-05
 - Added option to select single symbol for detail view
 - Added vivus.js for animated svgs
