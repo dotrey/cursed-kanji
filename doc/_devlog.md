@@ -2,6 +2,9 @@
 
 ## 2020-07-07
 - Added dedicated `gh-pages` branch for optimized website version with bundles js and css files
+- Lock keyboard input after time is up -> no accidentally adding another letter to the originally correct word
+- Made the lower keyboard row swipeable on the whole keyboard area
+- The complete bookshelf can now be tapped to enter the library, not just the button at the bottom
 
 ## 2020-07-05
 - Added option to select single symbol for detail view

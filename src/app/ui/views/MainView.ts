@@ -27,7 +27,11 @@ const MainView : any = {
     },
 
     buildLibrary(vnode : any) {
-        return m(".library", [
+        return m(".library", {
+            onclick : () => {
+                window.location.hash = "#!/library";
+            }
+        },[
             this.buildLibraryShelf(vnode),
             this.buildLibraryShelfButton()
         ])
@@ -70,11 +74,7 @@ const MainView : any = {
     },
 
     buildLibraryShelfButton() {
-        return m(".library-shelf-button", {
-                onclick : () => {
-                    window.location.hash = "#!/library";
-                }
-            }, "select lessons");
+        return m(".library-shelf-button", "select lessons");
     },
 
     buildGameLength() {

@@ -31,6 +31,10 @@ export default class Game {
 
         // listen to player input
         this.input.attach((proposedText : string) => {
+            if (proposedText && this.status.phase !== "kanji") {
+                // ignore player input when not in kanji phase, but allow resetting proposal
+                return;
+            }
             this.status.proposedText = proposedText;
         });
 
