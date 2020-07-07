@@ -3,8 +3,9 @@
     "version": "0.1.0",
     "scripts": {
         "test": "ts-mocha -p ./tsconfig.mocha.json src/**/*.spec.ts",
-        "bundle": "npm run bundle-css",
-        "bundle-css": "postcss ./assets/style/style.css -o ./assets/style/style.bundle.css"
+        "bundle": "npm run bundle-css && npm run bundle-js",
+        "bundle-css": "postcss ./assets/style/style.css -o ./assets/style/style.bundle.css",
+        "bundle-js" : "tsc && npx rollup --config"
     },
     "devDependencies": {
         "@types/chai": "*",

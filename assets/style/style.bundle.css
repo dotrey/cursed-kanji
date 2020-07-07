@@ -4,6 +4,10 @@
     font-display: block;
 }
 
+:root {
+    --text-color: #000;
+}
+
 html, body {
     position: relative;
     padding: 0;
@@ -43,6 +47,41 @@ body {
         ". . ."
     ;
     font-size: 6vw;
+}
+
+.container.main .settings-button {
+    position: relative;
+    grid-area: settings;
+    justify-self: center;
+    align-self: center;
+    width: 2em;
+    height: 2em;
+    box-sizing: border-box;
+    border: 0.5em solid transparent;
+    overflow: hidden;
+}
+
+.container.main .settings-button::before {
+    position: absolute;
+    content: "";
+    display: block;
+    border: 0.2em solid #fff;
+    top: 0;
+    left: -0.25em;
+    bottom: 0;
+    right: -0.25em;
+}
+
+.container.main .settings-button::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 2em;
+    height: 0.2em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
 }
 
 .container.main .library {
@@ -142,24 +181,24 @@ body {
 
 .container.library .library-header-back-button {
     position: absolute;
-    top: 0.25em;
-    left: 0.375em;
-    width: 1.5em;
-    height: 1.5em;
+    top: 0;
+    left: 0;
+    width: 2em;
+    height: 2em;
 }
 
 .container.library .library-header-back-button::before {
     position: absolute;
     display: block;
     content: "";
-    top: 0.75em;
-    left: 0.75em;
+    top: 50%;
+    left:50%;
     font-size: 50%;
-    width: 1.25em;
-    height: 1.25em;
+    width: 25%;
+    height: 25%;
     border-left: 0.2em solid #ffffff;
     border-top: 0.2em solid #ffffff;
-    transform: rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .container.library .library-books {
@@ -304,10 +343,171 @@ body {
     visibility: visible;
 }
 
+.container.settings {
+    font-size: 4vw;
+}
+
+.container.settings .settings-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-size: 2em;
+    height: 2em;
+    line-height: 2;
+    color: #ffffff;
+    font-family: "Noto Sans JP";
+    text-align: center;
+}
+
+.container.settings .settings-header-back-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2em;
+    height: 2em;
+}
+
+.container.settings .settings-header-back-button::before {
+    position: absolute;
+    display: block;
+    content: "";
+    top: 50%;
+    left:50%;
+    font-size: 50%;
+    width: 25%;
+    height: 25%;
+    border-left: 0.2em solid #ffffff;
+    border-top: 0.2em solid #ffffff;
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.container.settings .settings {
+    position: absolute;
+    top: 4em;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+.container.settings .settings-group {
+    position: relative;
+    padding: 1em 0.5em;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.container.settings .settings-group-title {
+    position: relative;
+    display: inline-block;
+    padding: 0.25em 0;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+    font-weight: bold;
+}
+
+.container.settings .settings-option {
+    position: relative;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0.2em 0;
+    margin-top: 0.25em;
+}
+
+.container.settings .settings-option:first-child {
+    margin-top: 0;
+}
+
+.container.settings .settings-option-name {
+    position: relative;
+    display: block;
+    padding: 0.5em;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.container.settings .settings-option-name>input[type="checkbox"] {
+    position: relative;
+    display: inline-block;
+    width: 1px;
+    height: 1px;
+    vertical-align: text-top;
+    margin-right: 1.5em;
+    visibility: hidden;
+    font-size: inherit;
+}
+
+.container.settings .settings-option-name>input[type="checkbox"]::before {
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    visibility: visible;
+    content: "";
+    left: 0;
+    top: 0;
+    width: 1.2em;
+    height: 1.2em;
+    background: #ffffff;
+    border: 0.1em solid #000000;
+    border-radius: 0.2em;
+}
+
+.container.settings .settings-option-name>input[type="checkbox"]::after {
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    visibility: hidden;
+    content: "";
+    left: 0.4em;
+    top: -0.2em;
+    width: 0.75em;
+    height: 1.25em;
+    background: transparent;
+    border-bottom: 0.3em solid #006600;
+    border-right: 0.3em solid #006600;
+    transform: rotate(45deg);
+}
+
+.container.settings .settings-option-name>input[type="checkbox"]:checked::after {
+    visibility: visible;
+}
+
 .container.game {
     --panel-height: 18vw;
     --key-size: 15vw;
     --proposal-size: 8vw;
+    --kanji-size: 40vw;
+    --kanji-background: rgb(255, 244, 228);
+}
+
+.container.game .game-back-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16vw;
+    height: 16vw;
+    line-height: 16vw;
+    font-size: 8vw;
+}
+
+.container.game .game-back-button::before {
+    position: absolute;
+    display: block;
+    content: "";
+    top: 50%;
+    left:50%;
+    font-size: 50%;
+    width: 25%;
+    height: 25%;
+    border-left: 0.2em solid #ffffff;
+    border-top: 0.2em solid #ffffff;
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 /* KANJI CARD */
@@ -318,8 +518,283 @@ body {
     left: 10vw;
     width: 80vw;
     height: 80vw;
-    background-color: #fff;
-    
+    background-color: var(--kanji-background);
+    box-shadow: inset 0 0 15vw rgba(0, 0, 0, 0.1);
+}
+
+.container.game .kanjicard-word {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    --scale: 1;
+    transform: translate(-50%, -50%) scale(var(--scale));
+    font-size: var(--kanji-size);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.container.game .kanjicard-timer {
+    position: absolute;
+    display: none;
+    top: 1em;
+    right: 1em;
+    text-align: right;
+    font-size: calc(var(--key-size) / 4);
+    opacity: 0.8;
+}
+
+.container.game .kanjicard-details {
+    position: absolute;
+    display: none;
+    bottom: 0.5em;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 75%;
+    color: #878787;
+}
+
+.container.game .kanjicard.phase-init {
+    display: none;
+}
+
+/* .container.game .kanjicard.phase-kanji {
+} */
+
+.container.game .kanjicard.phase-kanji .kanjicard-timer,
+.container.game .kanjicard.phase-kanji .kanjicard-details {
+    display: block;
+}
+
+.container.game .kanjicard.phase-failed {
+    animation: animation_kanji_failed 2s ease-out 0s 1 normal forwards;
+}
+
+.container.game .kanjicard.phase-success {
+    animation: animation_kanji_success 2s ease-out 0s 1 normal forwards;
+}
+
+@keyframes animation_kanji_failed {
+    0% { 
+        background: var(--kanji-background);
+        opacity: 1;
+        transform: scale(1);
+        color: var(--text-color);
+        margin-left: 0;
+    }
+    2% {
+        margin-left: -5vw;
+    }
+    6% {
+        margin-left: 5vw;
+    }
+    10% {
+        margin-left: -5vw;
+    }
+    14% {
+        margin-left: 5vw;
+    }
+    18% {
+        margin-left: -5vw;
+    }
+    22% {
+        margin-left: 5vw;
+    }
+    25% {
+        color: #bd0000;
+        opacity: 1;
+        margin-left: 0;
+        transform: scale(1);
+    }
+    100% {
+        background: rgba(255, 0, 0, 0.8);
+        opacity: 0;
+        transform: scale(2);
+        color: #bd0000;
+    }
+}
+
+@keyframes animation_kanji_success {
+    0% { 
+        background: var(--kanji-background);
+        opacity: 1;
+        transform: scale(1);
+        color: var(--text-color);
+        margin-top: 0%;
+    }
+    50% {
+        color: #00bd00;
+        opacity: 1;
+        margin-top: 0%;
+    }
+    100% {
+        background: rgba(255, 255, 255, 0);
+        opacity: 0;
+        transform: scale(1.5);
+        color: #ffffff;
+    }
+}
+
+/* KANJI DETAIL */
+
+.container.game .kanjidetail {
+    position: absolute;
+    top: 20%;
+    left: 0.5em;
+    right: 0.5em;
+    bottom: 0;
+    z-index: 0;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 0.5em 0.5em 0 0;
+    padding: 1em;
+    overflow: auto;
+    transition: all 0.5s ease;
+}
+
+.container.game .kanjidetail.hidden {
+    top: 100%;
+    visibility: hidden;
+}
+
+.container.game .kanjidetail::before {
+    position: fixed;
+    display: block;
+    content: "";
+    z-index: -1;
+    top: -0.5em;
+    right: -0.5em;
+    left: -0.5em;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.container.game .kanjidetail-close {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 16vw;
+    height: 16vw;
+    line-height: 16vw;
+    font-size: 8vw;
+    text-align: center;
+    color: #666666;
+}
+
+.container.game .kanjidetail-grid {
+    position: relative;
+    width: 85vw;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 60vw 5vw 20vw;
+    grid-template-rows: 60vw 1em auto 1em auto auto 1em auto;
+    grid-template-areas: 
+        "symbol . symbols"
+        "s1 s1 s1"
+        "word word word"
+        "s2 s2 s2"
+        "on on on"
+        "kun kun kun"
+        "s3 s3 s3"
+        "meaning meaning meaning"
+    ;
+}
+
+.container.game .kanjidetail-spacer {
+    position: relative;
+    width: 50vw;
+    height: 1px;
+    justify-self: center;
+    align-self: center;
+    background: linear-gradient(90deg, transparent 0%, #eeeeee 50%, transparent 100%);
+}
+
+.container.game .kanjidetail-spacer.s1 {
+    grid-area: s1;
+}
+
+.container.game .kanjidetail-spacer.s2 {
+    grid-area: s2;
+}
+
+.container.game .kanjidetail-spacer.s3 {
+    grid-area: s3;
+}
+
+.container.game .kanjidetail-symbol {
+    position: relative;
+    grid-area: symbol;
+    justify-self: stretch;
+    align-self: stretch;
+    border: 1px solid #eeeeee;
+}
+
+.container.game .kanjidetail-symbol.hide-stroke-order g[id*="strokenumbers" i]{
+    display: none;
+}
+
+.container.game .kanjidetail-symbols {
+    position: relative;
+    grid-area: symbols;
+    justify-self: stretch;
+    align-self: stretch;
+    border: 1px solid #eeeeee;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: auto;
+}
+
+.container.game .kanjidetail-symbols>span {
+    position: relative;
+    display: inline-block;
+    height: 16vw;
+    line-height: 14vw;
+    text-align: center;
+    font-size: 125%;
+    box-sizing: border-box;
+    border: 1vw solid transparent
+}
+
+.container.game .kanjidetail-symbols>span.selected {
+    border-color: #828dff;
+}
+
+.container.game .kanjidetail-text {
+    position: relative;
+    justify-self: stretch;
+    align-self: stretch;
+    padding: 0.5em 0;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.container.game .kanjidetail-text>b {
+    font-size: 90%;
+}
+
+.container.game .kanjidetail-text.word {
+    grid-area: word;
+    text-align: center;
+}
+
+.container.game .kanjidetail-text.reading-on {
+    grid-area: on;
+}
+
+.container.game .kanjidetail-text.reading-kun {
+    grid-area: kun;
+}
+
+.container.game .kanjidetail-text.meaning {
+    grid-area: meaning;
+    font-size: 90%;
+}
+
+.container.game .kanjidetail-text.meaning>b {
+    font-size: inherit;
 }
 
 /* ROMAJI BOARD */
