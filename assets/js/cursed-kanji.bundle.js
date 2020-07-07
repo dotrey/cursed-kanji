@@ -329,7 +329,11 @@ const MainView = {
         });
     },
     buildLibrary(vnode) {
-        return m(".library", [
+        return m(".library", {
+            onclick: () => {
+                window.location.hash = "#!/library";
+            }
+        }, [
             this.buildLibraryShelf(vnode),
             this.buildLibraryShelfButton()
         ]);
@@ -366,11 +370,7 @@ const MainView = {
         }));
     },
     buildLibraryShelfButton() {
-        return m(".library-shelf-button", {
-            onclick: () => {
-                window.location.hash = "#!/library";
-            }
-        }, "select lessons");
+        return m(".library-shelf-button", "select lessons");
     },
     buildGameLength() {
         return m(".game-length");
@@ -780,37 +780,36 @@ class GameInput {
         }
     }
     registerScrollRow(container) {
+        let scrollRow = container.querySelector(".romajiboard-scrollrow[data-scrollable]");
         let touchOptions = {
             cancelTouchUpAfterMove: false,
             onTouchMove: (e, dx, dy) => {
                 dx *= -1;
-                let snap = parseInt(e.getAttribute("data-scrollsnap") || "0");
-                let panelWidth = e.firstElementChild.offsetWidth;
-                e.scrollLeft = Math.max(0, snap * panelWidth + dx);
+                let snap = parseInt(scrollRow.getAttribute("data-scrollsnap") || "0");
+                let panelWidth = scrollRow.firstElementChild.offsetWidth;
+                scrollRow.scrollLeft = Math.max(0, snap * panelWidth + dx);
                 let scrollPercentage = Math.abs(dx / panelWidth);
-                if (scrollPercentage >= 0.25) {
+                if (scrollPercentage >= 0.20) {
                     if (dx > 0) {
                         snap++;
                     }
                     else {
                         snap--;
                     }
-                    snap = Math.max(0, Math.min(e.childElementCount - 1, snap));
-                    e.setAttribute("data-scrollsnap", "" + snap);
-                    this.scrollTo(e, snap * panelWidth);
+                    snap = Math.max(0, Math.min(scrollRow.childElementCount - 1, snap));
+                    scrollRow.setAttribute("data-scrollsnap", "" + snap);
+                    this.scrollTo(scrollRow, snap * panelWidth);
                     return true;
                 }
                 return false;
             },
             onTouchUp: (e) => {
-                let snap = parseInt(e.getAttribute("data-scrollsnap") || "0");
-                let panelWidth = e.firstElementChild.offsetWidth;
-                this.scrollTo(e, snap * panelWidth);
+                let snap = parseInt(scrollRow.getAttribute("data-scrollsnap") || "0");
+                let panelWidth = scrollRow.firstElementChild.offsetWidth;
+                this.scrollTo(scrollRow, snap * panelWidth);
             }
         };
-        for (let row of container.querySelectorAll(".romajiboard-scrollrow[data-scrollable]")) {
-            new TouchHandler(row, touchOptions);
-        }
+        new TouchHandler(container, touchOptions);
     }
     clearScrollTimeout(e) {
         let timeout = e.getAttribute("data-scroll-timeout");
@@ -1080,6 +1079,9 @@ class Game {
         this.loop = new SimpleLoop();
         this.stateMachine = new StateMachine(this, new InitialState());
         this.input.attach((proposedText) => {
+            if (proposedText && this.status.phase !== "kanji") {
+                return;
+            }
             this.status.proposedText = proposedText;
         });
         this.loop.attach(this.stateMachine.update.bind(this.stateMachine));
