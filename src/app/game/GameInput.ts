@@ -65,39 +65,38 @@ export default class GameInput {
         }
     }
 
-    private registerScrollRow(container : HTMLElement) {        
+    private registerScrollRow(container : HTMLElement) {
+        let scrollRow : HTMLElement = container.querySelector(".romajiboard-scrollrow[data-scrollable]");
         let touchOptions = {
             cancelTouchUpAfterMove : false,
             onTouchMove : (e : HTMLElement, dx : number, dy : number) => {
                 // invert the drag direction
                 dx *= -1;
-                let snap : number = parseInt(e.getAttribute("data-scrollsnap") || "0");
-                let panelWidth : number = (e.firstElementChild as HTMLElement).offsetWidth;
-                e.scrollLeft = Math.max(0, snap * panelWidth + dx);
+                let snap : number = parseInt(scrollRow.getAttribute("data-scrollsnap") || "0");
+                let panelWidth : number = (scrollRow.firstElementChild as HTMLElement).offsetWidth;
+                scrollRow.scrollLeft = Math.max(0, snap * panelWidth + dx);
                 let scrollPercentage : number = Math.abs(dx / panelWidth);
-                if (scrollPercentage >= 0.25) {
+                if (scrollPercentage >= 0.20) {
                     if (dx > 0) {
                         snap++;
                     }else{
                         snap--;
                     }
-                    snap = Math.max(0, Math.min(e.childElementCount - 1, snap));
-                    e.setAttribute("data-scrollsnap", "" + snap);
-                    this.scrollTo(e, snap * panelWidth);
+                    snap = Math.max(0, Math.min(scrollRow.childElementCount - 1, snap));
+                    scrollRow.setAttribute("data-scrollsnap", "" + snap);
+                    this.scrollTo(scrollRow, snap * panelWidth);
                     return true;
                 }
                 return false;
             },
             onTouchUp : (e : HTMLElement) => {
-                let snap : number = parseInt(e.getAttribute("data-scrollsnap") || "0");
-                let panelWidth : number = (e.firstElementChild as HTMLElement).offsetWidth;
-                this.scrollTo(e, snap * panelWidth);
+                let snap : number = parseInt(scrollRow.getAttribute("data-scrollsnap") || "0");
+                let panelWidth : number = (scrollRow.firstElementChild as HTMLElement).offsetWidth;
+                this.scrollTo(scrollRow, snap * panelWidth);
             }
         };
 
-        for (let row of container.querySelectorAll(".romajiboard-scrollrow[data-scrollable]")) {
-            new TouchHandler(row as HTMLElement, touchOptions);
-        }
+        new TouchHandler(container, touchOptions);
     }
 
     private clearScrollTimeout(e : HTMLElement) {
