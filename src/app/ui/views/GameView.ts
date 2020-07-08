@@ -40,7 +40,8 @@ const GameView : any = {
             m(".game-back-button", {
                 onclick : function() {
                     window.history.back();
-                }
+                },
+                style : this.detailOverlay ? "display: none;" : ""
             }),
             m(KanjiCardView, { 
                 game : vnode.attrs.game 

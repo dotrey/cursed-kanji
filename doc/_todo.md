@@ -9,5 +9,5 @@
     - [x] Allow swipe gesture on whole keyboard, not just on the lower row
 - [x] Make the whole bookshelf touchable, not just the button part at the bottom
 - [ ] Provide a hint on what to do when clicking "start" while no lessons are selected
-- [ ] When failing a word, show the correct solution
+- [x] When failing a word, show the correct solution
 - [x] Lock the keyboard after the correct romaji was entered

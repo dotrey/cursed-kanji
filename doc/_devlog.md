@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-07-08
+- Show correct romaji if kanji isn't solved within timelimit
+
 ## 2020-07-07
 - Added dedicated `gh-pages` branch for optimized website version with bundles js and css files
 - Lock keyboard input after time is up -> no accidentally adding another letter to the originally correct word
