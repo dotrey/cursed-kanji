@@ -482,8 +482,21 @@ body {
     --panel-height: 18vw;
     --key-size: 15vw;
     --proposal-size: 8vw;
+    --proposal-height: 11vw;
     --kanji-size: 40vw;
     --kanji-background: rgb(255, 244, 228);
+    --bottom-space: 0;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr var(--proposal-height) var(--proposal-size) calc(var(--panel-height) * 2) var(--bottom-space);
+    grid-template-areas: 
+        "kanji"
+        "proposal"
+        "."
+        "romajiboard"
+        "."
+    ;
 }
 
 .container.game .game-back-button {
@@ -513,9 +526,10 @@ body {
 /* KANJI CARD */
 
 .container.game .kanjicard {
-    position: absolute;
-    top: calc((100vh - (var(--panel-height) * 2 + var(--proposal-size) + var(--proposal-size))) / 2 - 40vw);
-    left: 10vw;
+    position: relative;
+    grid-area: kanji;
+    justify-self: center;
+    align-self: center;
     width: 80vw;
     height: 80vw;
     background-color: var(--kanji-background);
@@ -632,6 +646,49 @@ body {
         opacity: 0;
         transform: scale(1.5);
         color: #ffffff;
+    }
+}
+
+/* KANJI SOLUTION */
+
+.container.game .kanjicard-solution {
+    position: relative;
+    grid-area: kanji;
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+    background-color: var(--kanji-background);
+    font-size: var(--proposal-size);
+    line-height: var(--proposal-height);
+    transition: right 0.25s ease;
+    right: -100%;
+    box-sizing: border-box;
+    pointer-events: none;
+    touch-action: none;
+    text-align: center;
+    padding: 0 var(--proposal-size);
+}
+
+.container.game .kanjicard-solution.phase-failed {    
+    animation: animation_kanji_solution 2s ease-out 0s 1 normal forwards;
+}
+
+@keyframes animation_kanji_solution {
+    0% { 
+        right: -100%;
+        opacity: 1;
+    }
+    10% {
+        right: 0%;
+        opacity: 1;
+    }
+    85% {
+        right: 0%;
+        opacity: 1;
+    }
+    100% {
+        right: 0%;
+        opacity: 0;
     }
 }
 
@@ -800,11 +857,9 @@ body {
 /* ROMAJI BOARD */
 
 .container.game .romajiboard {
-    position: absolute;
+    position: relative;
+    grid-area: romajiboard;
     box-sizing: border-box;
-    bottom: 0;
-    left: 0;
-    right: 0;
     height: calc(var(--panel-height) * 2);
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.5);
@@ -889,33 +944,33 @@ body {
 /* ROMAJI PROPOSAL */
 
 .container.game .romaji-proposal {
-    position: absolute;
-    left: 0;
-    bottom: calc(var(--panel-height) * 2 + var(--proposal-size));
-    height: var(--proposal-size);
-    width: 100vw;
-    box-sizing: content-box;
-    padding: 1.5vw 0;
+    position: relative;
+    grid-area: proposal;
+    justify-self: stretch;
+    align-self: stretch;
     background-color: rgba(255, 255, 255, 0.5);
     font-size: var(--proposal-size);
+    line-height: var(--proposal-height);
 }
 
 .container.game .romaji-proposal-text {
     position: absolute;
+    top: calc((var(--proposal-height) - var(--proposal-size)) / 2);
     left: var(--proposal-size);
     right: var(--proposal-size);
+    height: var(--proposal-size);
     text-align: center;
-    line-height: calc(0.95 * var(--proposal-size));
+    line-height: var(--proposal-size);
 }
 
 .container.game .romaji-proposal-undo {
     position: absolute;
     right: 0;
     width: var(--proposal-size);
-    height: var(--proposal-size);
+    height: var(--proposal-height);
     text-align: center;
     font-size: 80%;
-    line-height: var(--proposal-size);
+    line-height: var(--proposal-height);
     color: #666666;
 }
 
@@ -923,10 +978,10 @@ body {
     position: absolute;
     left: 0;
     width: var(--proposal-size);
-    height: var(--proposal-size);
+    height: var(--proposal-height);
     text-align: center;
     font-size: 80%;
-    line-height: var(--proposal-size);
+    line-height: var(--proposal-height);
     color: #bd0000;
 }
 
