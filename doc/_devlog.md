@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-07-11
+- Added option to adjust keyboard offset from bottom
+
 ## 2020-07-08
 - Show correct romaji if kanji isn't solved within timelimit
 

@@ -12,6 +12,7 @@
         "@types/mocha": "*",
         "chai": "*",
         "mocha": "*",
+        "mock-local-storage": "^1.1.12",
         "postcss-cli": "^7.1.1",
         "postcss-import": "^12.0.1",
         "rollup": "^2.8",

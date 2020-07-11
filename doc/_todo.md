@@ -5,7 +5,7 @@
 
 ## 2020-07-06
 - On devices with no physical buttons, the lower screen area is often used for swipe gestures, which conflict with the lower row of the keyboard
-    - [ ] Add option to adjust distance between bottom of screen and bottom of keyboard
+    - [x] Add option to adjust distance between bottom of screen and bottom of keyboard
     - [x] Allow swipe gesture on whole keyboard, not just on the lower row
 - [x] Make the whole bookshelf touchable, not just the button part at the bottom
 - [ ] Provide a hint on what to do when clicking "start" while no lessons are selected

@@ -6,6 +6,8 @@ import Settings from "./app/game/Settings.js";
 
 export default class CursedKanji {
 
+    static version : string = "0.5";
+
     ui : Ui;
     game : Game;
     library : Library;

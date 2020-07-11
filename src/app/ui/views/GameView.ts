@@ -35,7 +35,7 @@ const GameView : any = {
 
     view(vnode : any) {
         return m(".container.game", {
-
+            style : "--bottom-space:" + vnode.attrs.settings.romajiBoardOffsetBottom + "vw;"
         }, [
             m(".game-back-button", {
                 onclick : function() {

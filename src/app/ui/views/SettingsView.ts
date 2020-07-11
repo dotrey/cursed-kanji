@@ -1,5 +1,6 @@
 import m from "../Mithril.js";
 import Settings from "../../game/Settings.js";
+import CursedKanji from "../../../CursedKanji.js";
 
 const SettingsView : any = {
     settings : <Settings> null,
@@ -31,45 +32,31 @@ const SettingsView : any = {
 
     buildSettings() {
         return m(".settings", [
-            this.buildRomajiBoardLayout()
+            this.buildGameSettings(),
+            this.buildAbout()
         ]);
     },
 
-    buildRomajiBoardLayout() {
+    buildGameSettings() {
         return m(".settings-group", [
-            m(".settings-group-title", "Keyboard Layout"),
-            m(".settings-option", [
-                m("label.settings-option-name", [
-                    m("input", {
-                        type : "checkbox",
-                        checked : this.settings.romajiBoardLayout === "aiueo",
-                        onchange : () => {
-                            this.settings.romajiBoardLayout = "aiueo";
-                        }
-                    }),
-                    "hiragana order"
-                ]),
-                m("label.settings-option-name", [
-                    m("input", {
-                        type : "checkbox",
-                        checked : this.settings.romajiBoardLayout === "aiueo-bz",
-                        onchange : () => {
-                            this.settings.romajiBoardLayout = "aiueo-bz";
-                        }
-                    }),
-                    "hiragana + alphabetical order"
-                ]),
-                m("label.settings-option-name", [
-                    m("input", {
-                        type : "checkbox",
-                        checked : this.settings.romajiBoardLayout === "a-z",
-                        onchange : () => {
-                            this.settings.romajiBoardLayout = "a-z";
-                        }
-                    }),
-                    "alphabetical order"
-                ])
-            ])
+            m(".settings-group-title", "Game Settings"),
+            m(".settings-button.more", {
+                onclick : function() {
+                    window.location.hash = "#!/settings/keyboard"
+                }
+            }, "Keyboard Settings")
+        ])
+    },
+
+    buildAbout() {
+        return m(".settings-group", [
+            m(".settings-group-title", "About"),
+            m(".settings-button.more", {
+                onclick : function() {
+                    window.location.hash = "#!/settings/credits"
+                }
+            }, "Credits"),
+            m(".settings-footer-text", "version " + CursedKanji.version)
         ])
     }
 }
