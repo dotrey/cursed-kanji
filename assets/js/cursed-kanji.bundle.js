@@ -291,7 +291,9 @@ const GameView = {
         }
     },
     view(vnode) {
-        return m(".container.game", {}, [
+        return m(".container.game", {
+            style: "--bottom-space:" + vnode.attrs.settings.romajiBoardOffsetBottom + "vw;"
+        }, [
             m(".game-back-button", {
                 onclick: function () {
                     window.history.back();
@@ -519,44 +521,29 @@ const SettingsView = {
     },
     buildSettings() {
         return m(".settings", [
-            this.buildRomajiBoardLayout()
+            this.buildGameSettings(),
+            this.buildAbout()
         ]);
     },
-    buildRomajiBoardLayout() {
+    buildGameSettings() {
         return m(".settings-group", [
-            m(".settings-group-title", "Keyboard Layout"),
-            m(".settings-option", [
-                m("label.settings-option-name", [
-                    m("input", {
-                        type: "checkbox",
-                        checked: this.settings.romajiBoardLayout === "aiueo",
-                        onchange: () => {
-                            this.settings.romajiBoardLayout = "aiueo";
-                        }
-                    }),
-                    "hiragana order"
-                ]),
-                m("label.settings-option-name", [
-                    m("input", {
-                        type: "checkbox",
-                        checked: this.settings.romajiBoardLayout === "aiueo-bz",
-                        onchange: () => {
-                            this.settings.romajiBoardLayout = "aiueo-bz";
-                        }
-                    }),
-                    "hiragana + alphabetical order"
-                ]),
-                m("label.settings-option-name", [
-                    m("input", {
-                        type: "checkbox",
-                        checked: this.settings.romajiBoardLayout === "a-z",
-                        onchange: () => {
-                            this.settings.romajiBoardLayout = "a-z";
-                        }
-                    }),
-                    "alphabetical order"
-                ])
-            ])
+            m(".settings-group-title", "Game Settings"),
+            m(".settings-button.more", {
+                onclick: function () {
+                    window.location.hash = "#!/settings/keyboard";
+                }
+            }, "Keyboard Settings")
+        ]);
+    },
+    buildAbout() {
+        return m(".settings-group", [
+            m(".settings-group-title", "About"),
+            m(".settings-button.more", {
+                onclick: function () {
+                    window.location.hash = "#!/settings/credits";
+                }
+            }, "Credits"),
+            m(".settings-footer-text", "version " + CursedKanji.version)
         ]);
     }
 };
@@ -593,6 +580,195 @@ class SvgLoader {
     }
 }
 
+const KeyboardSettingsView = {
+    settings: null,
+    oninit(vnode) {
+        this.settings = vnode.attrs.settings;
+    },
+    oncreate() {
+        this.updateRomajiBoard();
+    },
+    view(vnode) {
+        return m(".container.settings", [
+            this.buildHeader(),
+            this.buildSettings()
+        ]);
+    },
+    buildHeader() {
+        return m(".settings-header", [
+            "Settings: Keyboard",
+            m(".settings-header-back-button", {
+                onclick: () => {
+                    window.history.back();
+                }
+            })
+        ]);
+    },
+    buildSettings() {
+        return m(".settings", [
+            this.buildRomajiBoardLayout(),
+            this.buildRomajiBoardPosition(),
+            this.buildRomajiBoardPreview()
+        ]);
+    },
+    buildRomajiBoardLayout() {
+        return m(".settings-group", [
+            m(".settings-group-title", "Keyboard Layout"),
+            m(".settings-option", [
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "checkbox",
+                        checked: this.settings.romajiBoardLayout === "aiueo",
+                        onchange: () => {
+                            this.settings.romajiBoardLayout = "aiueo";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "hiragana order"
+                ]),
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "checkbox",
+                        checked: this.settings.romajiBoardLayout === "aiueo-bz",
+                        onchange: () => {
+                            this.settings.romajiBoardLayout = "aiueo-bz";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "hiragana + alphabetical order"
+                ]),
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "checkbox",
+                        checked: this.settings.romajiBoardLayout === "a-z",
+                        onchange: () => {
+                            this.settings.romajiBoardLayout = "a-z";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "alphabetical order"
+                ])
+            ])
+        ]);
+    },
+    buildRomajiBoardPosition() {
+        let me = this;
+        return m(".settings-group", [
+            m(".settings-group-title", "Keyboard Position"),
+            m(".settings-option", [
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "range",
+                        min: "0",
+                        max: "18",
+                        step: "1",
+                        value: "" + this.settings.romajiBoardOffsetBottom,
+                        oninput: function () {
+                            me.settings.romajiBoardOffsetBottom = this.value;
+                            me.updateRomajiBoard();
+                        }
+                    }),
+                    "distance bottom: " + this.settings.romajiBoardOffsetBottom
+                ])
+            ])
+        ]);
+    },
+    buildRomajiBoardPreview() {
+        return m(".container.game", {
+            style: "top: unset; height: auto; background: none;--bottom-space:" + this.settings.romajiBoardOffsetBottom + "vw;"
+        }, this.buildRomajiBoardStub());
+    },
+    buildRomajiBoardStub() {
+        return m(RomajiBoardView, {
+            settings: this.settings,
+            game: {
+                input: {
+                    registerRomajiBoard() { }
+                }
+            }
+        });
+    },
+    updateRomajiBoard() {
+        let e = document.getElementById("game-romajiboard");
+        if (e) {
+            let me = this;
+            m.mount(e.parentElement, {
+                view() {
+                    return me.buildRomajiBoardStub();
+                }
+            });
+        }
+    }
+};
+
+const CreditsSettingsView = {
+    settings: null,
+    oninit(vnode) {
+        this.settings = vnode.attrs.settings;
+    },
+    view(vnode) {
+        return m(".container.settings", [
+            this.buildHeader(),
+            this.buildCredits()
+        ]);
+    },
+    buildHeader() {
+        return m(".settings-header", [
+            "Credits",
+            m(".settings-header-back-button", {
+                onclick: () => {
+                    window.history.back();
+                }
+            })
+        ]);
+    },
+    buildCredits() {
+        return m(".settings", [
+            this.buildKanjiVg(),
+            this.buildKanjiDic()
+        ]);
+    },
+    buildKanjiVg() {
+        return m(".settings-group", [
+            m(".settings-text", [
+                m(".title", "KanjiVG"),
+                "Website: ",
+                m("a", {
+                    href: "https://kanjivg.tagaini.net/",
+                    target: "_blank",
+                    rel: "noopener"
+                }, "kanjivg.tagaini.net"),
+                m("br"),
+                m("br"),
+                m.trust("KanjiVG is copyright &copy; Ulrich Apel"),
+                m("br"),
+                "License: ",
+                m("a", {
+                    href: "https://creativecommons.org/licenses/by-sa/3.0/",
+                    target: "_blank",
+                    rel: "noopener"
+                }, "CC BY-SA 3.0"),
+            ])
+        ]);
+    },
+    buildKanjiDic() {
+        return m(".settings-group", [
+            m(".settings-text", [
+                m(".title", "KANJIDIC"),
+                "Website: ",
+                m("a", {
+                    href: "http://www.edrdg.org/wiki/index.php/KANJIDIC_Project",
+                    target: "_blank",
+                    rel: "noopener"
+                }, "edrdg.org/wiki/index.php/KANJIDIC_Project"),
+                m("br"),
+                m("br"),
+                m.trust("This app uses the KANJIDIC dictionary files. These files are the property of the <a href=\"http://www.edrdg.org/\" target=\"_blank\" rel=\"noopener\">Electronic Dictionary Research and Development Group</a>, and are used in conformance with the Group's <a href=\"\" target=\"_blank\" rel=\"noopener\">license</a>."),
+            ])
+        ]);
+    },
+};
+
 class Ui {
     constructor(cursed) {
         this.cursed = cursed;
@@ -606,6 +782,20 @@ class Ui {
                 render: function () {
                     return m(MainView, {
                         cursed: me.cursed
+                    });
+                }
+            },
+            "/settings/keyboard": {
+                render: function () {
+                    return m(KeyboardSettingsView, {
+                        settings: me.cursed.settings
+                    });
+                }
+            },
+            "/settings/credits": {
+                render: function () {
+                    return m(CreditsSettingsView, {
+                        settings: me.cursed.settings
                     });
                 }
             },
@@ -1289,14 +1479,16 @@ class LibraryBookLoader {
 }
 
 class ObjectStorage {
-    constructor(o, attributes = []) {
+    constructor(o, attributes = [], objectId = "") {
         this.prefix = "cursedkanji-1-";
         this.canSave = true;
+        this.objectId = "";
         this.attributes = [];
         this.object = o;
         this.attributes = attributes;
+        this.objectId = (objectId !== null && objectId !== void 0 ? objectId : "") + "-";
         try {
-            this.storage = window.localStorage;
+            this.storage = localStorage;
         }
         catch (e) {
         }
@@ -1319,10 +1511,10 @@ class ObjectStorage {
                         this.object[attr.name] = this.get(attr.name, attr.defaultValue);
                         break;
                     case "array":
-                        this.object[attr.name] = this.getObject(attr.name, attr.defaultValue);
+                        this.object[attr.name] = this.getArray(attr.name, attr.defaultValue);
                         break;
                     case "object":
-                        this.object[attr.name] = this.getArray(attr.name, attr.defaultValue);
+                        this.object[attr.name] = this.getObject(attr.name, attr.defaultValue);
                         break;
                 }
             }
@@ -1335,19 +1527,19 @@ class ObjectStorage {
         if (typeof value !== "string") {
             value = JSON.stringify(value);
         }
-        this.storage.setItem(this.prefix + key, value);
+        this.storage.setItem(this.prefix + this.objectId + key, value);
     }
     get(key, defaultValue = "") {
         if (!this.storage) {
             return defaultValue;
         }
-        return this.storage.getItem(this.prefix + key) || defaultValue;
+        return this.storage.getItem(this.prefix + this.objectId + key) || defaultValue;
     }
     getObject(key, defaultValue = {}) {
         if (!this.storage) {
             return defaultValue;
         }
-        let value = this.storage.getItem(this.prefix + key);
+        let value = this.storage.getItem(this.prefix + this.objectId + key);
         if (!value) {
             return defaultValue;
         }
@@ -1357,11 +1549,14 @@ class ObjectStorage {
         if (!this.storage) {
             return defaultValue;
         }
-        let value = this.storage.getItem(this.prefix + key);
+        let value = this.storage.getItem(this.prefix + this.objectId + key);
         if (!value) {
             return defaultValue;
         }
         return JSON.parse(value);
+    }
+    get storagePrefix() {
+        return this.prefix;
     }
 }
 
@@ -1556,36 +1751,53 @@ class WordPool {
 
 class Settings {
     constructor() {
-        this.settingRomajiBoardLayout = "";
+        this._romajiBoardLayout = "";
+        this._romajiBoardOffsetBottom = "0";
         this.storage = new ObjectStorage(this, [
             {
-                name: "settingRomajiBoardLayout",
+                name: "_romajiBoardLayout",
                 type: "string",
                 defaultValue: "aiueo-bz"
+            },
+            {
+                name: "_romajiBoardOffsetBottom",
+                type: "string",
+                defaultValue: "0"
             }
-        ]);
+        ], "settings");
         this.storage.load();
     }
     get romajiBoardLayout() {
-        return this.settingRomajiBoardLayout;
+        return this._romajiBoardLayout;
     }
     set romajiBoardLayout(value) {
-        this.settingRomajiBoardLayout = value;
+        this._romajiBoardLayout = value;
+        this.storage.save();
+    }
+    get romajiBoardOffsetBottom() {
+        return Number.parseInt(this._romajiBoardOffsetBottom);
+    }
+    set romajiBoardOffsetBottom(value) {
+        this._romajiBoardOffsetBottom = value.toString();
         this.storage.save();
     }
 }
 
-class CursedKanji {
-    constructor() {
-        this.build();
+let CursedKanji = (() => {
+    class CursedKanji {
+        constructor() {
+            this.build();
+        }
+        build() {
+            this.library = new Library();
+            this.wordPool = new WordPool(this.library);
+            this.game = new Game(this.wordPool);
+            this.settings = new Settings();
+            this.ui = new Ui(this);
+        }
     }
-    build() {
-        this.library = new Library();
-        this.wordPool = new WordPool(this.library);
-        this.game = new Game(this.wordPool);
-        this.settings = new Settings();
-        this.ui = new Ui(this);
-    }
-}
+    CursedKanji.version = "0.5";
+    return CursedKanji;
+})();
 
 export default CursedKanji;
