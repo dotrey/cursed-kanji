@@ -50,6 +50,11 @@
     position: relative;
     padding: 1em 0.5em;
     background-color: rgba(255, 255, 255, 0.3);
+    margin-top: 1em;
+}
+
+.container.settings .settings-group:first-child {
+    margin-top: 0;
 }
 
 .container.settings .settings-group-title {
@@ -62,6 +67,42 @@
     overflow: hidden;
     max-width: 100%;
     font-weight: bold;
+}
+
+.container.settings .settings-button {
+    position: relative;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0.75em;
+    margin-top: 0.25em;
+    
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.container.settings .settings-button:first-child {
+    margin-top: 0;
+}
+
+.container.settings .settings-button.more {
+    padding-right: 1.5em;
+}
+
+.container.settings .settings-button.more::after {
+    position: absolute;
+    display: block;
+    content: "";
+    border: 0.2em solid currentColor;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    transform: rotate(45deg);
+    background-color: transparent;
+    width: 0.5em;
+    height: 0.5em;
+    top: 1em;
+    right: 0.75em;
+    opacity: 0.25;
 }
 
 .container.settings .settings-option {
@@ -131,4 +172,33 @@
 
 .container.settings .settings-option-name>input[type="checkbox"]:checked::after {
     visibility: visible;
+}
+
+.container.settings .settings-option-name>input[type="range"] {
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    margin-right: 0.75em;
+}
+
+.container.settings .settings-text {
+    position: relative;
+    display: block;
+    padding: 0.75em;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.container.settings .settings-text>.title {
+    position: relative;
+    display: block;
+    font-size: 125%;
+    margin-bottom: 0.5em;
+}
+
+.container.settings .settings-footer-text {
+    position: relative;
+    display: block;
+    padding: 0.5em;
+    text-align: center;
+    margin-bottom: -1em;
 }
