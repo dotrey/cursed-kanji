@@ -1,6 +1,7 @@
 import m from "../../Mithril.js";
 
 const RomajiBoardView : any = {
+    orientation : "",
     layout : "aiueo",
     layouts : {
         "aiueo" : {
@@ -26,10 +27,13 @@ const RomajiBoardView : any = {
     oncreate(vnode : any) {
         vnode.attrs.game.input.registerRomajiBoard("game-romajiboard");
         this.layout = vnode.attrs.settings.romajiBoardLayout;
+        this.orientation = vnode.attrs.settings.romajiBoardOrientation;
     },
 
     view() {
-        return m(".romajiboard", {
+        return m(".romajiboard" + 
+            (this.orientation ? "." : "") + this.orientation
+        , {
             "id" : "game-romajiboard"
         },[
             this.buildVocalPanel(),

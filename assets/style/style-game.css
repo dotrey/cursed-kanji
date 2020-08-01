@@ -439,6 +439,22 @@
     display: none;
 }
 
+.container.game .romaji-board-orientation-left .romajiboard-panel {
+    justify-content: flex-start;
+}
+
+.container.game .romaji-board-orientation-left .romajiboard-key {
+    margin-left: 1.5vw;
+}
+
+.container.game .romaji-board-orientation-right .romajiboard-panel {
+    justify-content: flex-end;
+}
+
+.container.game .romaji-board-orientation-right .romajiboard-key {
+    margin-right: 1.5vw;
+}
+
 .container.game .romajiboard-key {
     position: relative;
     box-sizing: border-box;

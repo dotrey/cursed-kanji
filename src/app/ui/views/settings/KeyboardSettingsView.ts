@@ -81,7 +81,9 @@ const KeyboardSettingsView : any = {
 
     buildRomajiBoardPosition() {
         let me = this;
-        return m(".settings-group", [
+        return m(".settings-group", {
+            style : "margin-bottom: 55vw;"
+        }, [
             m(".settings-group-title", "Keyboard Position"),
             m(".settings-option", [
                 m("label.settings-option-name", [
@@ -98,13 +100,48 @@ const KeyboardSettingsView : any = {
                     }),
                     "distance bottom: " + this.settings.romajiBoardOffsetBottom
                 ])
+            ]),
+            m(".settings-option", [
+                m("label.settings-option-name", [
+                    m("input", {
+                        type : "checkbox",
+                        checked : this.settings.romajiBoardOrientation === "romaji-board-orientation-left",
+                        onchange : () => {
+                            this.settings.romajiBoardOrientation = "romaji-board-orientation-left";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "left"
+                ]),
+                m("label.settings-option-name", [
+                    m("input", {
+                        type : "checkbox",
+                        checked : this.settings.romajiBoardOrientation === "",
+                        onchange : () => {
+                            this.settings.romajiBoardOrientation = "";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "stretch"
+                ]),
+                m("label.settings-option-name", [
+                    m("input", {
+                        type : "checkbox",
+                        checked : this.settings.romajiBoardOrientation === "romaji-board-orientation-right",
+                        onchange : () => {
+                            this.settings.romajiBoardOrientation = "romaji-board-orientation-right";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "right"
+                ])
             ])
         ])
     },
 
     buildRomajiBoardPreview() {
         return m(".container.game", {
-            style : "top: unset; height: auto; background: none;--bottom-space:" + this.settings.romajiBoardOffsetBottom + "vw;"
+            style : "position: fixed; top: unset; height: auto; background: none; pointer-events: none; --bottom-space:" + this.settings.romajiBoardOffsetBottom + "vw;"
         }, 
             this.buildRomajiBoardStub()
         )

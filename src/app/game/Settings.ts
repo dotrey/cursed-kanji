@@ -5,6 +5,7 @@ export default class Settings {
     private storage : ObjectStorage;
     private _romajiBoardLayout : string = "";
     private _romajiBoardOffsetBottom : string = "0";
+    private _romajiBoardOrientaion : string = "";
 
     constructor() {
         this.storage = new ObjectStorage(this, [
@@ -17,6 +18,11 @@ export default class Settings {
                 name : "_romajiBoardOffsetBottom",
                 type : "string",
                 defaultValue : "0"
+            },
+            {
+                name : "_romajiBoardOrientaion",
+                type : "string",
+                defaultValue : ""
             }
         ], "settings");
         this.storage.load();
@@ -37,6 +43,15 @@ export default class Settings {
 
     set romajiBoardOffsetBottom(value : number) {
         this._romajiBoardOffsetBottom = value.toString();
+        this.storage.save();
+    }
+
+    get romajiBoardOrientation() {
+        return this._romajiBoardOrientaion;
+    }
+
+    set romajiBoardOrientation(value : string) {
+        this._romajiBoardOrientaion = value;
         this.storage.save();
     }
 }

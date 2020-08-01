@@ -6,6 +6,8 @@ export default class GameInput {
     proposedText : string = "";
     private maxTextLength : number = 24;
     private changeListeners : ((proposedText : string) => void)[] = [];
+    private swipeAfterScreenPercentage : number = 0.15;
+    private cancelTouchUpAfterScreenPercentage : number = 0.05;
 
     registerRomajiProposal(id : string) {
         let romajiProposal : HTMLElement = document.getElementById(id);
@@ -57,7 +59,9 @@ export default class GameInput {
             onTouchUp : (e : HTMLElement) => {
                 this.propose(e.getAttribute("data-key") || "");
                 m.redraw();
-            }
+            },
+            // allow dragging for 5% of width before cancelling the touch up event
+            cancelTouchUpThreshold : Math.floor(container.offsetWidth * this.cancelTouchUpAfterScreenPercentage)
         };
 
         for (let key of container.querySelectorAll(".romajiboard-key")) {
@@ -76,7 +80,7 @@ export default class GameInput {
                 let panelWidth : number = (scrollRow.firstElementChild as HTMLElement).offsetWidth;
                 scrollRow.scrollLeft = Math.max(0, snap * panelWidth + dx);
                 let scrollPercentage : number = Math.abs(dx / panelWidth);
-                if (scrollPercentage >= 0.20) {
+                if (scrollPercentage >= this.swipeAfterScreenPercentage) {
                     if (dx > 0) {
                         snap++;
                     }else{

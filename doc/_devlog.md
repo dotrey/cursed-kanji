@@ -1,5 +1,9 @@
 # Devlog
 
+## 2020-08-01
+- Added option for left handed/right handed keyboard
+- Adjusted thresholds for keyboard swipe and touch-cancel
+
 ## 2020-07-11
 - Added option to adjust keyboard offset from bottom
 
