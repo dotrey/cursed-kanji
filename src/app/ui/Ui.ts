@@ -8,6 +8,7 @@ import SettingsView from "./views/SettingsView.js";
 import SvgLoader from "./SvgLoader.js";
 import KeyboardSettingsView from "./views/settings/KeyboardSettingsView.js";
 import CreditsSettingsView from "./views/settings/CreditsSettingsView.js";
+import SealView from "./views/SealView.js";
 
 export default class Ui {
     private svgLoader : SvgLoader;
@@ -24,6 +25,13 @@ export default class Ui {
             "/" : {
                 render : function() {
                     return m(MainView, {
+                        cursed : me.cursed
+                    });
+                }
+            },
+            "/sealed" : {
+                render : function() {
+                    return m(SealView, {
                         cursed : me.cursed
                     });
                 }

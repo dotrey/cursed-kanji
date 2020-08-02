@@ -1,5 +1,11 @@
 # Devlog
 
+## 2020-08-02
+- Added cardbox with 3 slots for spaced repetition
+    - Each word can move up only once a day
+- Added corruption
+- Added seals
+
 ## 2020-08-01
 - Added option for left handed/right handed keyboard
 - Adjusted thresholds for keyboard swipe and touch-cancel

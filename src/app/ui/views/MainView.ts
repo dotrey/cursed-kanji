@@ -14,7 +14,7 @@ const MainView : any = {
             this.buildSettingsButton(),
             this.buildLibrary(vnode),
             this.buildGameLength(),
-            this.buildGameStart()
+            this.buildGameStart(vnode)
         ]);
     },
 
@@ -81,12 +81,17 @@ const MainView : any = {
         return m(".game-length");
     },
 
-    buildGameStart() {
+    buildGameStart(vnode : any) {        
+        let library : Library = vnode.attrs.cursed.library as Library
+        let corruption : number = Math.floor(library.cardbox.corruption() * 1000) / 10;
         return m(".game-start", {
                 onclick : () => {
                     window.location.hash = "#!/game";
                 }
-            }, "start game");
+            }, [
+                "start game",
+                m(".game-corruption", "Corruption: " + corruption + "%")
+            ]);
     }
 }
 

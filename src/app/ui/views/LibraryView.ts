@@ -101,7 +101,10 @@ const LibraryView : any = {
         }, [
             m("label.library-book-title", [
                 m("input", checkboxOptions),
-                book.name
+                book.name,
+                (library.isBookSealed(book.id) ? 
+                    m(".library-book-seal")    
+                    : null)
             ])
         ]);
     }

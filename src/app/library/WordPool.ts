@@ -16,6 +16,7 @@ export default class WordPool {
      * Fills the pool with words from the books enabled in the library.
      */
     async fill() : Promise<boolean> {
+        let slotCount : number[] = [0, 0, 0, 0];
         this.pool.length = 0;
         let wordIdIndexMap : {[index : string] : number} = {};
         for(const bookId of this.library.enabledBookIds()) {
@@ -60,6 +61,15 @@ export default class WordPool {
                     // Replace the original word with the merged copy
                     this.pool[wordIdIndexMap[word.id]] = wordCopy;
                 }
+
+                // count the words for each cardbox slot
+                let slot = this.library.cardbox.whichSlot(word.id);
+                if (slot < 1) {
+                    // new word
+                    this.library.cardbox.insert(word.id, 1);
+                    slot = 1;
+                }
+                slotCount[slot]++;
             }
         }
         if (!this.pool.length) {
@@ -69,8 +79,59 @@ export default class WordPool {
             word.id = "7121";
             this.pool.push(word);
             window.location.hash = "!/";
+            return true;
         }
+
+        // The pool now contains all words from all active books. For a better learning
+        // effect, spaced repetition is utilized with 3 slots:
+        // - words in slot 1 (yes, not 0-based) are always repeated and thus always in the pool
+        // - words in slot 2 are repeated every second time, thus only half of them (random) should be in the current pool
+        // - words in slot 3 are repeated every fourth time, thus only a quarter of them (random) should be in the pool
+        // To achieve this, the number of words per slot were counted while collecting the words.
+        // Now, the pool gets shuffled and then looped over, counting the words per slot. After the limits for slot 2 and 3
+        // are reached, each word encountered for these slots are removed from the pool to achieve a 100%/50%/25% distribution.
+        // Exceptions:
+        // - When there are no words in slot 1, slot 2 will be 100% and slot 3 will be 50%
+        // - When there are no words in slot 1 and slot 2, slot 3 will be 100%
+        this.shuffle();
+        if (slotCount[1] > 0 && slotCount[2] > 0) {
+            let limit2 : number = Math.ceil(slotCount[2] / 2);
+            let count2 : number = 0;
+            let limit3 : number = Math.ceil(slotCount[3] / 4);
+            let count3 : number = 0;
+            if (slotCount[1] < 1) {
+                limit2 = slotCount[2];
+                limit3 = Math.ceil(slotCount[3] / 2);
+            }
+            let i : number = 0;
+            while (i < this.pool.length) {
+                let slot = this.library.cardbox.whichSlot(this.pool[i].id);
+                if ((slot === 2 && count2 >= limit2) ||
+                    (slot === 3 && count3 >= limit3)) {
+                    // word of slot 2 or 3, but limit is reached
+                    // -> remove
+                    this.pool.splice(i, 1);
+                }else{
+                    if (slot === 2) {
+                        count2++;
+                    }else if (slot === 3) {
+                        count3++;
+                    }
+                    i++;
+                }
+            }
+        }
+
         return true;
+    }
+
+    shuffle() {
+        for (let i = this.pool.length - 1; i > 0; i--) {
+            let n = Math.floor(Math.random() * (i + 1));
+            let tmp = this.pool[i];
+            this.pool[i] = this.pool[n];
+            this.pool[n] = tmp;
+        }
     }
 
     clear() {
@@ -110,8 +171,8 @@ export default class WordPool {
      * player struggles with.
      */
     markCurrentWordCorrect() {
-        if (this.activeWord && this.correctWords.indexOf(this.activeWord.id) < 0) {
-            this.correctWords.push(this.activeWord.id);
+        if (this.activeWord) {
+            this.library.cardbox.moveUp(this.activeWord.id);
         }
     }
 
@@ -122,8 +183,8 @@ export default class WordPool {
      * player struggles with.
      */
     markCurrentWordWrong() {
-        if (this.activeWord && this.wrongWords.indexOf(this.activeWord.id) < 0) {
-            this.wrongWords.push(this.activeWord.id);
+        if (this.activeWord) {
+            this.library.cardbox.moveDown(this.activeWord.id);
         }
     }
 }
