@@ -7,6 +7,7 @@ const TestView = {
 };
 
 const RomajiBoardView = {
+    orientation: "",
     layout: "aiueo",
     layouts: {
         "aiueo": {
@@ -25,9 +26,11 @@ const RomajiBoardView = {
     oncreate(vnode) {
         vnode.attrs.game.input.registerRomajiBoard("game-romajiboard");
         this.layout = vnode.attrs.settings.romajiBoardLayout;
+        this.orientation = vnode.attrs.settings.romajiBoardOrientation;
     },
     view() {
-        return m(".romajiboard", {
+        return m(".romajiboard" +
+            (this.orientation ? "." : "") + this.orientation, {
             "id": "game-romajiboard"
         }, [
             this.buildVocalPanel(),
@@ -333,7 +336,7 @@ const MainView = {
             this.buildSettingsButton(),
             this.buildLibrary(vnode),
             this.buildGameLength(),
-            this.buildGameStart()
+            this.buildGameStart(vnode)
         ]);
     },
     buildSettingsButton() {
@@ -390,12 +393,17 @@ const MainView = {
     buildGameLength() {
         return m(".game-length");
     },
-    buildGameStart() {
+    buildGameStart(vnode) {
+        let library = vnode.attrs.cursed.library;
+        let corruption = Math.floor(library.cardbox.corruption() * 1000) / 10;
         return m(".game-start", {
             onclick: () => {
                 window.location.hash = "#!/game";
             }
-        }, "start game");
+        }, [
+            "start game",
+            m(".game-corruption", "Corruption: " + corruption + "%")
+        ]);
     }
 };
 
@@ -489,7 +497,10 @@ const LibraryView = {
         }, [
             m("label.library-book-title", [
                 m("input", checkboxOptions),
-                book.name
+                book.name,
+                (library.isBookSealed(book.id) ?
+                    m(".library-book-seal")
+                    : null)
             ])
         ]);
     }
@@ -653,7 +664,9 @@ const KeyboardSettingsView = {
     },
     buildRomajiBoardPosition() {
         let me = this;
-        return m(".settings-group", [
+        return m(".settings-group", {
+            style: "margin-bottom: 55vw;"
+        }, [
             m(".settings-group-title", "Keyboard Position"),
             m(".settings-option", [
                 m("label.settings-option-name", [
@@ -670,12 +683,47 @@ const KeyboardSettingsView = {
                     }),
                     "distance bottom: " + this.settings.romajiBoardOffsetBottom
                 ])
+            ]),
+            m(".settings-option", [
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "checkbox",
+                        checked: this.settings.romajiBoardOrientation === "romaji-board-orientation-left",
+                        onchange: () => {
+                            this.settings.romajiBoardOrientation = "romaji-board-orientation-left";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "left"
+                ]),
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "checkbox",
+                        checked: this.settings.romajiBoardOrientation === "",
+                        onchange: () => {
+                            this.settings.romajiBoardOrientation = "";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "stretch"
+                ]),
+                m("label.settings-option-name", [
+                    m("input", {
+                        type: "checkbox",
+                        checked: this.settings.romajiBoardOrientation === "romaji-board-orientation-right",
+                        onchange: () => {
+                            this.settings.romajiBoardOrientation = "romaji-board-orientation-right";
+                            this.updateRomajiBoard();
+                        }
+                    }),
+                    "right"
+                ])
             ])
         ]);
     },
     buildRomajiBoardPreview() {
         return m(".container.game", {
-            style: "top: unset; height: auto; background: none;--bottom-space:" + this.settings.romajiBoardOffsetBottom + "vw;"
+            style: "position: fixed; top: unset; height: auto; background: none; pointer-events: none; --bottom-space:" + this.settings.romajiBoardOffsetBottom + "vw;"
         }, this.buildRomajiBoardStub());
     },
     buildRomajiBoardStub() {
@@ -769,6 +817,29 @@ const CreditsSettingsView = {
     },
 };
 
+const SealView = {
+    view(vnode) {
+        return m(".container", [
+            m(".seal", {
+                onclick: function () {
+                    let e = document.getElementById("break-seal-dialog");
+                    if (e) {
+                        e.remove();
+                    }
+                    this.classList.add("break");
+                    window.setTimeout(() => {
+                        window.location.hash = "#/";
+                    }, 2000);
+                }
+            }),
+            m(".dialogbox", {
+                id: "break-seal-dialog",
+                class: "dialogbox centered dark"
+            }, "Touch the seal to break it...")
+        ]);
+    }
+};
+
 class Ui {
     constructor(cursed) {
         this.cursed = cursed;
@@ -781,6 +852,13 @@ class Ui {
             "/": {
                 render: function () {
                     return m(MainView, {
+                        cursed: me.cursed
+                    });
+                }
+            },
+            "/sealed": {
+                render: function () {
+                    return m(SealView, {
                         cursed: me.cursed
                     });
                 }
@@ -914,13 +992,14 @@ class TouchHandler {
         return -1;
     }
     applyOptions(options) {
-        this.cssTouchDown = options["cssTouchDown"] || this.cssTouchDown;
-        this.cssTouchUp = options["cssTouchUp"] || this.cssTouchUp;
-        this.cssTouchMove = options["cssTouchMove"] || this.cssTouchMove;
+        var _a, _b, _c, _d;
+        this.cssTouchDown = ((_a = options["cssTouchDown"]) !== null && _a !== void 0 ? _a : this.cssTouchDown);
+        this.cssTouchUp = ((_b = options["cssTouchUp"]) !== null && _b !== void 0 ? _b : this.cssTouchUp);
+        this.cssTouchMove = ((_c = options["cssTouchMove"]) !== null && _c !== void 0 ? _c : this.cssTouchMove);
         this.cancelTouchUpAfterMove = typeof options["cancelTouchUpAfterMove"] !== "undefined" ?
             !!options["cancelTouchUpAfterMove"] :
             this.cancelTouchUpAfterMove;
-        this.cancelTouchUpThreshold = options["cancelTouchUpThreshold"] || this.cancelTouchUpThreshold;
+        this.cancelTouchUpThreshold = ((_d = options["cancelTouchUpThreshold"]) !== null && _d !== void 0 ? _d : this.cancelTouchUpThreshold);
         this.onTouchDown = options["onTouchDown"] || null;
         this.onTouchUp = options["onTouchUp"] || null;
         this.onTouchMove = options["onTouchMove"] || null;
@@ -932,6 +1011,8 @@ class GameInput {
         this.proposedText = "";
         this.maxTextLength = 24;
         this.changeListeners = [];
+        this.swipeAfterScreenPercentage = 0.15;
+        this.cancelTouchUpAfterScreenPercentage = 0.05;
     }
     registerRomajiProposal(id) {
         let romajiProposal = document.getElementById(id);
@@ -976,7 +1057,8 @@ class GameInput {
             onTouchUp: (e) => {
                 this.propose(e.getAttribute("data-key") || "");
                 m.redraw();
-            }
+            },
+            cancelTouchUpThreshold: Math.floor(container.offsetWidth * this.cancelTouchUpAfterScreenPercentage)
         };
         for (let key of container.querySelectorAll(".romajiboard-key")) {
             new TouchHandler(key, touchOptions);
@@ -992,7 +1074,7 @@ class GameInput {
                 let panelWidth = scrollRow.firstElementChild.offsetWidth;
                 scrollRow.scrollLeft = Math.max(0, snap * panelWidth + dx);
                 let scrollPercentage = Math.abs(dx / panelWidth);
-                if (scrollPercentage >= 0.20) {
+                if (scrollPercentage >= this.swipeAfterScreenPercentage) {
                     if (dx > 0) {
                         snap++;
                     }
@@ -1560,6 +1642,159 @@ class ObjectStorage {
     }
 }
 
+class Cardbox {
+    constructor() {
+        this.slot1 = [];
+        this.rawSlot1 = "";
+        this.slot2 = [];
+        this.rawSlot2 = "";
+        this.slot3 = [];
+        this.rawSlot3 = "";
+        this.slots = [];
+        this.improvedToday = [];
+        this.storage = new ObjectStorage(this, [
+            {
+                name: "rawSlot1",
+                type: "string",
+                defaultValue: ""
+            },
+            {
+                name: "rawSlot2",
+                type: "string",
+                defaultValue: ""
+            },
+            {
+                name: "rawSlot3",
+                type: "string",
+                defaultValue: ""
+            },
+            {
+                name: "improvedToday",
+                type: "array",
+                defaultValue: []
+            }
+        ], "cardbox");
+        this.loadSlots();
+    }
+    insert(wordId, slot) {
+        for (let i = 0; i < 3; i++) {
+            if (i + 1 === slot) {
+                this.addWordToSlot(wordId, this.slots[i]);
+            }
+            else {
+                this.removeWordFromSlot(wordId, this.slots[i]);
+            }
+        }
+        this.saveSlots();
+    }
+    moveUp(wordId) {
+        if (!this.canImproveWord(wordId)) {
+            return;
+        }
+        const currentSlot = this.whichSlot(wordId);
+        if (currentSlot + 1 <= 3) {
+            this.insert(wordId, currentSlot + 1);
+        }
+        this.markWordImproved(wordId);
+    }
+    moveDown(wordId) {
+        this.insert(wordId, 1);
+    }
+    whichSlot(wordId) {
+        for (let i = 0; i < 3; i++) {
+            if (this.slots[i].indexOf(wordId) > -1) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+    slotDistribution() {
+        let n = [0,
+            this.slot1.length,
+            this.slot2.length,
+            this.slot3.length
+        ];
+        n[0] = n[1] + n[2] + n[3];
+        return n;
+    }
+    corruption() {
+        let dist = this.slotDistribution();
+        let total = dist[0] + dist[1];
+        let corruption = 0;
+        if (dist[1] + dist[2] > 0) {
+            corruption = total / (dist[1] + dist[1] + dist[2]);
+        }
+        return corruption;
+    }
+    canImproveWord(wordId) {
+        return this.improvedToday.indexOf(wordId) < 0;
+    }
+    markWordImproved(wordId) {
+        let today = (new Date()).toLocaleDateString();
+        if (this.improvedToday.length < 1) {
+            this.improvedToday.push(today);
+        }
+        else if (this.improvedToday[0] !== today) {
+            this.improvedToday.length = 0;
+            this.improvedToday.push(today);
+        }
+        this.improvedToday.push(wordId);
+        this.storage.save();
+    }
+    removeWordFromSlot(wordId, slot) {
+        let i = slot.indexOf(wordId);
+        if (i > -1) {
+            slot.splice(i, 1);
+        }
+    }
+    addWordToSlot(wordId, slot) {
+        let i = slot.indexOf(wordId);
+        if (i < 0) {
+            slot.push(wordId);
+        }
+    }
+    loadSlots() {
+        this.storage.load();
+        this.slot1 = this.deserialize(this.rawSlot1);
+        this.slot2 = this.deserialize(this.rawSlot2);
+        this.slot3 = this.deserialize(this.rawSlot3);
+        this.slots = [
+            this.slot1, this.slot2, this.slot3
+        ];
+    }
+    saveSlots() {
+        this.rawSlot1 = this.serialize(this.slot1);
+        this.rawSlot2 = this.serialize(this.slot2);
+        this.rawSlot3 = this.serialize(this.slot3);
+        this.storage.save();
+    }
+    serialize(values) {
+        return values.reduce((serialized, value) => {
+            if (serialized.length) {
+                serialized += ";";
+            }
+            serialized += value.split(";").reduce((word, charcode) => {
+                word += String.fromCharCode(parseInt("0x" + charcode));
+                return word;
+            }, "");
+            return serialized;
+        }, "");
+    }
+    deserialize(value) {
+        return value.split(";").map((words) => {
+            return words.split("").map((word) => {
+                let tmp = word.charCodeAt(0).toString(16);
+                while (tmp.length < 5) {
+                    tmp = "0" + tmp;
+                }
+                return tmp;
+            }).join(";");
+        }).filter((value) => {
+            return !!value;
+        });
+    }
+}
+
 var __awaiter$3 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1573,14 +1808,21 @@ class Library {
     constructor() {
         this.books = {};
         this.enabledBooks = [];
+        this.unsealedBooks = [];
         this.storage = new ObjectStorage(this, [
             {
                 name: "enabledBooks",
                 type: "array",
                 defaultValue: []
+            },
+            {
+                name: "unsealedBooks",
+                type: "array",
+                defaultValue: []
             }
-        ]);
+        ], "library");
         this.storage.load();
+        this.cardbox = new Cardbox();
     }
     loadIndex() {
         return __awaiter$3(this, void 0, void 0, function* () {
@@ -1608,6 +1850,9 @@ class Library {
     enableBook(id) {
         if (this.enabledBooks.indexOf(id) < 0) {
             this.enabledBooks.push(id);
+        }
+        if (this.isBookSealed(id)) {
+            this.unsealBook(id);
         }
         this.storage.save();
     }
@@ -1645,6 +1890,20 @@ class Library {
         }
         return true;
     }
+    isBookSealed(id) {
+        return this.unsealedBooks.indexOf(id) < 0;
+    }
+    unsealBook(id) {
+        this.unsealedBooks.push(id);
+        this.storage.save();
+        this.getBook(id).then((book) => {
+            for (const word of book.words) {
+                if (this.cardbox.whichSlot(word.id) < 1) {
+                    this.cardbox.insert(word.id, 1);
+                }
+            }
+        });
+    }
 }
 
 class LibraryWord {
@@ -1674,6 +1933,7 @@ class WordPool {
     }
     fill() {
         return __awaiter$4(this, void 0, void 0, function* () {
+            let slotCount = [0, 0, 0, 0];
             this.pool.length = 0;
             let wordIdIndexMap = {};
             for (const bookId of this.library.enabledBookIds()) {
@@ -1707,6 +1967,12 @@ class WordPool {
                         }
                         this.pool[wordIdIndexMap[word.id]] = wordCopy;
                     }
+                    let slot = this.library.cardbox.whichSlot(word.id);
+                    if (slot < 1) {
+                        this.library.cardbox.insert(word.id, 1);
+                        slot = 1;
+                    }
+                    slotCount[slot]++;
                 }
             }
             if (!this.pool.length) {
@@ -1714,9 +1980,46 @@ class WordPool {
                 word.id = "7121";
                 this.pool.push(word);
                 window.location.hash = "!/";
+                return true;
+            }
+            this.shuffle();
+            if (slotCount[1] > 0 && slotCount[2] > 0) {
+                let limit2 = Math.ceil(slotCount[2] / 2);
+                let count2 = 0;
+                let limit3 = Math.ceil(slotCount[3] / 4);
+                let count3 = 0;
+                if (slotCount[1] < 1) {
+                    limit2 = slotCount[2];
+                    limit3 = Math.ceil(slotCount[3] / 2);
+                }
+                let i = 0;
+                while (i < this.pool.length) {
+                    let slot = this.library.cardbox.whichSlot(this.pool[i].id);
+                    if ((slot === 2 && count2 >= limit2) ||
+                        (slot === 3 && count3 >= limit3)) {
+                        this.pool.splice(i, 1);
+                    }
+                    else {
+                        if (slot === 2) {
+                            count2++;
+                        }
+                        else if (slot === 3) {
+                            count3++;
+                        }
+                        i++;
+                    }
+                }
             }
             return true;
         });
+    }
+    shuffle() {
+        for (let i = this.pool.length - 1; i > 0; i--) {
+            let n = Math.floor(Math.random() * (i + 1));
+            let tmp = this.pool[i];
+            this.pool[i] = this.pool[n];
+            this.pool[n] = tmp;
+        }
     }
     clear() {
         this.pool.length = 0;
@@ -1738,13 +2041,13 @@ class WordPool {
         });
     }
     markCurrentWordCorrect() {
-        if (this.activeWord && this.correctWords.indexOf(this.activeWord.id) < 0) {
-            this.correctWords.push(this.activeWord.id);
+        if (this.activeWord) {
+            this.library.cardbox.moveUp(this.activeWord.id);
         }
     }
     markCurrentWordWrong() {
-        if (this.activeWord && this.wrongWords.indexOf(this.activeWord.id) < 0) {
-            this.wrongWords.push(this.activeWord.id);
+        if (this.activeWord) {
+            this.library.cardbox.moveDown(this.activeWord.id);
         }
     }
 }
@@ -1753,6 +2056,7 @@ class Settings {
     constructor() {
         this._romajiBoardLayout = "";
         this._romajiBoardOffsetBottom = "0";
+        this._romajiBoardOrientaion = "";
         this.storage = new ObjectStorage(this, [
             {
                 name: "_romajiBoardLayout",
@@ -1763,6 +2067,11 @@ class Settings {
                 name: "_romajiBoardOffsetBottom",
                 type: "string",
                 defaultValue: "0"
+            },
+            {
+                name: "_romajiBoardOrientaion",
+                type: "string",
+                defaultValue: ""
             }
         ], "settings");
         this.storage.load();
@@ -1779,6 +2088,13 @@ class Settings {
     }
     set romajiBoardOffsetBottom(value) {
         this._romajiBoardOffsetBottom = value.toString();
+        this.storage.save();
+    }
+    get romajiBoardOrientation() {
+        return this._romajiBoardOrientaion;
+    }
+    set romajiBoardOrientation(value) {
+        this._romajiBoardOrientaion = value;
         this.storage.save();
     }
 }

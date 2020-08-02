@@ -33,16 +33,203 @@ body {
     background: linear-gradient(#e66465, #9198e5);
 }
 
+.container .dialogbox {
+    position: absolute;
+    bottom: 1vw;
+    left: 1vw;
+    width: 98vw;
+    height: auto;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0.5em;
+    line-height: 1.4;
+    overflow: hidden;
+}
+
+.container .dialogbox.centered {
+    background-color: rgba(55, 55, 55, 0.9);
+    color: #ffffff;
+}
+
+.container .dialogbox.dark {
+    text-align: center;
+}
+
+.container .seal {
+    position: absolute;
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    width: 80vw;
+    height: 160vw;
+    overflow: hidden;
+    border: 2vw solid #ff0000;
+    background-color: #ffffff;
+    box-shadow: 1vw 1vw 2vw rgba(0, 0, 0, 0.1);
+}
+
+.container .seal::before {
+    position: absolute;
+    display: block;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    box-shadow: inset 0 0 15vw rgba(0, 0, 0, 0.1);
+}
+
+.container .seal::after {
+    position: absolute;
+    display: block;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: url('/assets/img/seal.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform-origin: center;
+}
+
+.container .seal.break {
+    animation: animation_seal_breaking 2s linear 0s 1 normal forwards;
+}
+
+.container .seal.break::before {
+    animation: animation_seal_breaking_before 2s linear 0s 1 normal forwards;
+}
+
+.container .seal.break::after {
+    animation: animation_seal_breaking_after 2s linear 0s 1 normal forwards;
+}
+
+@keyframes animation_seal_breaking_before {
+    0% { 
+        box-shadow: inset 0 0 15vw 0vw rgba(0, 0, 0, 0.1);
+    }
+    75% {
+        box-shadow: inset 0 0 15vw 40vw rgba(0, 0, 0, 1);
+    }
+    100% {
+        box-shadow: inset 0 0 15vw 40vw rgba(0, 0, 0, 1);
+    }
+}
+
+@keyframes animation_seal_breaking_after {
+    0% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    10% {
+        transform: scale(1);
+    }
+    11% {
+        transform: scale(1.01);
+    }
+    20% {
+        transform: scale(1);
+    }
+    21% {
+        transform: scale(1.02);
+    }
+    30% {
+        transform: scale(1);
+    }
+    31% {
+        transform: scale(1.03);
+    }
+    40% {
+        transform: scale(1);
+    }
+    41% {
+        transform: scale(1.04);
+    }
+    50% {
+        transform: scale(1);
+    }
+    51% {
+        transform: scale(1.05);
+    }
+    60% {
+        transform: scale(1);
+    }
+    61% {
+        transform: scale(1.06);
+    }
+    70% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(4);
+    }
+}
+
+@keyframes animation_seal_breaking {
+    0% { 
+        border-color: #ff0000;
+        transform: translate(-50%, -50%) rotate(0);
+        opacity: 1;
+    }
+    /* 10% {
+        transform: translate(-50%, -50%) rotate(5deg);
+    }
+    20% {
+        transform: translate(-50%, -50%) rotate(-6deg);
+    }
+    30% {
+        transform: translate(-50%, -50%) rotate(7deg);
+    }
+    40% {
+        transform: translate(-50%, -50%) rotate(-8deg);
+    } */
+    50% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    60% {
+        transform: translate(-50%, -50%) rotate(-10deg);
+    }
+    70% {
+        border-color: #000000;
+        transform: translate(-50%, -50%) rotate(10deg);
+    }
+    75% {
+        transform: translate(-50%, -50%) rotate(-10deg);
+    }
+    80% {
+        transform: translate(-50%, -50%) rotate(10deg);
+        opacity: 1;
+    }
+    85% {
+        transform: translate(-50%, -50%) rotate(-10deg);
+    }
+    90% {
+        transform: translate(-50%, -50%) rotate(10deg);
+    }
+    95% {
+        transform: translate(-50%, -50%) rotate(-10deg);
+    }
+    100% {
+        opacity: 0;
+        border-color: #000000;
+        transform: translate(-50%, -50%) rotate(-10deg);
+    }
+}
+
 .container.main {
     display: grid;
     grid-template-columns: 15% 70% 15%;
-    grid-template-rows: 10% 1fr 1em 3em 1em 3em 10%;
+    grid-template-rows: 10% 1fr 1em 2.5em 25%;
     grid-template-areas: 
         ". . settings"
         ". library ."
         ". . . "
-        ". gamelength ."
-        ". . ."
         ". gamestart ."
         ". . ."
     ;
@@ -159,7 +346,18 @@ body {
     grid-area: gamestart;
     text-align: center;
     background: rgba(242, 242, 242, 0.5);
-    line-height: 3em;
+    line-height: 2.25em;
+}
+
+.container.main .game-start .game-corruption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    grid-area: corruption;
+    text-align: center;
+    font-size: 50%;
+    line-height: 1.5;
 }
 
 .container.library {
@@ -341,6 +539,20 @@ body {
 
 .container.library .library-book-title>input[type="checkbox"]:checked::after {
     visibility: visible;
+}
+
+.container.library .library-book-seal {
+    position: absolute;
+    width: 2em;
+    height: 2em;
+    top: 0.25em;
+    left: 0.25em;
+    background-color: #ffffff;
+    background-image: url('/assets/img/seal.png');
+    background-repeat: no-repeat;
+    background-size: 110%;
+    background-position: center;
+    border-radius: 50%;
 }
 
 .container.settings {
@@ -987,6 +1199,22 @@ body {
 .container.game .romajiboard-panel:first-child::before,
 .container.game .romajiboard-panel:last-child::after {
     display: none;
+}
+
+.container.game .romaji-board-orientation-left .romajiboard-panel {
+    justify-content: flex-start;
+}
+
+.container.game .romaji-board-orientation-left .romajiboard-key {
+    margin-left: 1.5vw;
+}
+
+.container.game .romaji-board-orientation-right .romajiboard-panel {
+    justify-content: flex-end;
+}
+
+.container.game .romaji-board-orientation-right .romajiboard-key {
+    margin-right: 1.5vw;
 }
 
 .container.game .romajiboard-key {
