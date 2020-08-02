@@ -1,13 +1,11 @@
 .container.main {
     display: grid;
     grid-template-columns: 15% 70% 15%;
-    grid-template-rows: 10% 1fr 1em 3em 1em 3em 10%;
+    grid-template-rows: 10% 1fr 1em 2.5em 25%;
     grid-template-areas: 
         ". . settings"
         ". library ."
         ". . . "
-        ". gamelength ."
-        ". . ."
         ". gamestart ."
         ". . ."
     ;
@@ -124,5 +122,16 @@
     grid-area: gamestart;
     text-align: center;
     background: rgba(242, 242, 242, 0.5);
-    line-height: 3em;
+    line-height: 2.25em;
+}
+
+.container.main .game-start .game-corruption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    grid-area: corruption;
+    text-align: center;
+    font-size: 50%;
+    line-height: 1.5;
 }

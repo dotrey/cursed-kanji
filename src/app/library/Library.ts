@@ -4,12 +4,15 @@ import LibraryBook from "./LibraryBook.js";
 import LibraryBookLoader from "./files/LibraryBookLoader.js";
 import LibraryIndexBookFileStructure from "./files/LibraryIndexBookFileStructure.js";
 import ObjectStorage from "../../storage/ObjectStorage.js";
+import Cardbox from "./Cardbox.js";
 
 export default class Library {
     index : LibraryIndex;
     books : {[index : string] : LibraryBook} = {};
+    cardbox : Cardbox;
 
     private enabledBooks : string[] = [];
+    private unsealedBooks : string[] = [];
     private storage : ObjectStorage;
 
     constructor() {
@@ -19,10 +22,16 @@ export default class Library {
                     name : "enabledBooks",
                     type : "array",
                     defaultValue : []
+                },
+                {
+                    name : "unsealedBooks",
+                    type : "array",
+                    defaultValue : []
                 }
-            ]
+            ], "library"
         )
         this.storage.load();
+        this.cardbox = new Cardbox();
     }
 
     /**
@@ -67,6 +76,9 @@ export default class Library {
     enableBook(id : string) {
         if (this.enabledBooks.indexOf(id) < 0) {
             this.enabledBooks.push(id);
+        }
+        if (this.isBookSealed(id)) {
+            this.unsealBook(id);
         }
         this.storage.save()
     }
@@ -132,5 +144,31 @@ export default class Library {
             }
         }
         return true;
+    }
+
+    /**
+     * Checks if the book with the given id is still sealed.
+     * @param id 
+     */
+    isBookSealed(id : string) {
+        return this.unsealedBooks.indexOf(id) < 0;
+    }
+
+    /**
+     * Unseals the book with the given id. Unsealing a book will add all
+     * the words of the book to the first slot of the cardbox.
+     * @param id 
+     */
+    unsealBook(id : string) {
+        this.unsealedBooks.push(id);
+        this.storage.save();
+        this.getBook(id).then((book : LibraryBook) => {
+            for(const word of book.words) {
+                if (this.cardbox.whichSlot(word.id) < 1) {
+                    // word not yet in the cardbox
+                    this.cardbox.insert(word.id, 1);
+                }
+            }
+        });
     }
 }

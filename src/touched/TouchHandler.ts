@@ -112,14 +112,14 @@ export default class TouchHandler {
     }
 
     private applyOptions(options : {[index : string] : any}) {
-        this.cssTouchDown = options["cssTouchDown"] as string || this.cssTouchDown;
-        this.cssTouchUp = options["cssTouchUp"] as string || this.cssTouchUp;
-        this.cssTouchMove = options["cssTouchMove"] as string || this.cssTouchMove;
+        this.cssTouchDown = (options["cssTouchDown"] ?? this.cssTouchDown) as string;
+        this.cssTouchUp = (options["cssTouchUp"] ?? this.cssTouchUp) as string;
+        this.cssTouchMove = (options["cssTouchMove"] ?? this.cssTouchMove) as string;
 
         this.cancelTouchUpAfterMove = typeof options["cancelTouchUpAfterMove"] !== "undefined" ?
             !!options["cancelTouchUpAfterMove"] : 
             this.cancelTouchUpAfterMove;
-        this.cancelTouchUpThreshold = options["cancelTouchUpThreshold"] as number || this.cancelTouchUpThreshold;
+        this.cancelTouchUpThreshold = (options["cancelTouchUpThreshold"] ?? this.cancelTouchUpThreshold) as number ;
         
         this.onTouchDown = options["onTouchDown"] as (element : HTMLElement) => void || null;
         this.onTouchUp = options["onTouchUp"] as (element : HTMLElement) => void || null;
