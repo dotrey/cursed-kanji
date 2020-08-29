@@ -4,7 +4,7 @@ export default class DBMigration1 {
     }
 
     private static createTblCardbox(db : IDBDatabase) {
-        let objectStore : IDBObjectStore = db.createObjectStore("tlb_cardbox", { keyPath : "wordId" });
+        let objectStore : IDBObjectStore = db.createObjectStore("tbl_cardbox", { keyPath : "wordId" });
         // create an index on the box number for quick retrieval
         objectStore.createIndex("box", "box", { unique : false });
         // also create index on timesKnown and avgInputTime for statistical uses

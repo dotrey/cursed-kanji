@@ -1,4 +1,4 @@
-import DBMigration1 from "./dbmigrations/DBMigration1";
+import DBMigration1 from "./dbmigrations/DBMigration1.js";
 
 export default class LibraryDB {
 
