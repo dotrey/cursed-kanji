@@ -3,6 +3,8 @@ import Library from "../../library/Library.js";
 import LibraryBook from "../../library/LibraryBook.js";
 
 const MainView : any = {
+    corruption : <number> 0,
+
     oninit(vnode : any) {
         vnode.attrs.cursed.library.loadIndex().then(() => {
             m.redraw();
@@ -83,14 +85,16 @@ const MainView : any = {
 
     buildGameStart(vnode : any) {        
         let library : Library = vnode.attrs.cursed.library as Library
-        let corruption : number = Math.floor(library.cardbox.corruption() * 1000) / 10;
+        library.cardbox.corruption().then((v : number) => {
+            this.corruption = Math.floor(v * 100);
+        })
         return m(".game-start", {
                 onclick : () => {
                     window.location.hash = "#!/game";
                 }
             }, [
                 "start game",
-                m(".game-corruption", "Corruption: " + corruption + "%")
+                m(".game-corruption", "Corruption: " + this.corruption + "%")
             ]);
     }
 }

@@ -59,26 +59,53 @@ export default class Cardbox {
      *  <total count>, <count slot 1>, <count slot 2>, <count slot 3>
      * ]
      */
-    slotDistribution() : number[] {
-        let n : number[] = [0,
-            0,
-            0,
-            0
-        ];
-        n[0] = n[1] + n[2] + n[3];
-        return n;
+    slotDistribution() : Promise<number[]> {
+        return new Promise<number[]>(async (resolve, reject) => {
+            // this.db.objectStore(this.tableName).index()
+            let r = await Promise.all([
+                new Promise<number>((resolve, reject) => {
+                    if (this.db.ready()) {
+                        this.db.objectStore(this.tableName).index("slot").count(1).onsuccess = (ev : Event) => {
+                            resolve((ev as any).target.result || 0)
+                        }
+                    }else{
+                        resolve(0);
+                    }
+                }),
+                new Promise<number>((resolve, reject) => {
+                    if (this.db.ready()) {
+                        this.db.objectStore(this.tableName).index("slot").count(2).onsuccess = (ev : Event) => {
+                            resolve((ev as any).target.result || 0)
+                        }
+                    }else{
+                        resolve(0);
+                    }
+                }),
+                new Promise<number>((resolve, reject) => {
+                    if (this.db.ready()) {
+                        this.db.objectStore(this.tableName).index("slot").count(3).onsuccess = (ev : Event) => {
+                            resolve((ev as any).target.result || 0)
+                        }
+                    }else{
+                        resolve(0);
+                    }
+                })
+            ]);
+            r.unshift(r[0] + r[1] + r[2])
+            resolve(r);
+        });
     }
 
     /**
      * Returns the corruption as percentage.
      */
-    corruption() : number {
+    async corruption() : Promise<number> {
         // slot 1 weighs double
-        let dist : number[] = this.slotDistribution();
-        let total : number = dist[0] + dist[1];
+        let dist : number[] = await this.slotDistribution();
+        console.log(dist);
         let corruption : number = 0;
-        if (dist[1] + dist[2] > 0) {
-            corruption = total / (dist[1] + dist[1] + dist[2]);
+        if (dist[0] > 0) {
+            corruption = ((dist[1] + dist[1] + dist[2]) / dist[0]) / 2;
         }
         return corruption;
     }

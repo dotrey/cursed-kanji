@@ -7,25 +7,35 @@ export default class LibraryDB {
 
     private db : IDBDatabase;
 
-    constructor() {
-        let request = indexedDB.open(this.dbName, this.dbVersion);
-        request.onerror = (ev : Event) => {
-            console.log("IndexedDB not available");
-        }
-        request.onsuccess = (ev : Event) => {
-            this.db = (ev as any).target.result as IDBDatabase;
-        }
-        request.onupgradeneeded = (ev : IDBVersionChangeEvent) => {
-            let db : IDBDatabase = (ev as any).target.result as IDBDatabase;
-            let version : number = ev.oldVersion || 0;
-            if (version === 0) {
-                // migrate to version 1
-                DBMigration1.migrate(db);
+    constructor() {}
+
+    initialize() : Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            let request = indexedDB.open(this.dbName, this.dbVersion);
+            request.onerror = (ev : Event) => {
+                console.log("IndexedDB not available");
+                resolve(false);
             }
-        }
+            request.onsuccess = (ev : Event) => {
+                this.db = (ev as any).target.result as IDBDatabase;
+                resolve(true);
+            }
+            request.onupgradeneeded = (ev : IDBVersionChangeEvent) => {
+                let db : IDBDatabase = (ev as any).target.result as IDBDatabase;
+                let version : number = ev.oldVersion || 0;
+                if (version === 0) {
+                    // migrate to version 1
+                    DBMigration1.migrate(db);
+                }
+            }
+        });
     }
 
-    objectStore(store : string, mode : "readwrite" | "readonly" = "readonly") {
+    objectStore(store : string, mode : "readwrite" | "readonly" = "readonly") : IDBObjectStore {
         return this.db.transaction(store, mode).objectStore(store);
+    }
+
+    ready() : boolean {
+        return !!this.db;
     }
 }

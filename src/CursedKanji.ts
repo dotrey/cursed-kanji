@@ -17,11 +17,19 @@ export default class CursedKanji {
     settings : Settings;
 
     constructor() {
-        this.build();
+        this.prepare().then(() => {
+            this.build();
+        })
+    }
+
+    private async prepare() : Promise<boolean> {
+        let success : boolean = true;
+        this.libraryDB = new LibraryDB();
+        success = success && await this.libraryDB.initialize();
+        return success;
     }
 
     private build() {
-        this.libraryDB = new LibraryDB();
         this.library = new Library(this.libraryDB);
         this.wordPool = new WordPool(this.library);
         this.game = new Game(this.wordPool);

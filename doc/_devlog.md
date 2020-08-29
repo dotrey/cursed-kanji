@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-08-30
+- Fixed calculation of corruption
+
 ## 2020-08-29
 - Updating cardbox to use `IndexedDB` instead of `localStorage`
 
