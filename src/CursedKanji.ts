@@ -3,6 +3,7 @@ import Game from "./app/game/Game.js";
 import Library from "./app/library/Library.js";
 import WordPool from "./app/library/WordPool.js";
 import Settings from "./app/game/Settings.js";
+import LibraryDB from "./app/library/LibraryDB.js";
 
 export default class CursedKanji {
 
@@ -11,6 +12,7 @@ export default class CursedKanji {
     ui : Ui;
     game : Game;
     library : Library;
+    libraryDB : LibraryDB;
     wordPool : WordPool;
     settings : Settings;
 
@@ -19,7 +21,8 @@ export default class CursedKanji {
     }
 
     private build() {
-        this.library = new Library();
+        this.libraryDB = new LibraryDB();
+        this.library = new Library(this.libraryDB);
         this.wordPool = new WordPool(this.library);
         this.game = new Game(this.wordPool);
         this.settings = new Settings();

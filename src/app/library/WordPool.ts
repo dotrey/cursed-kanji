@@ -63,7 +63,7 @@ export default class WordPool {
                 }
 
                 // count the words for each cardbox slot
-                let slot = this.library.cardbox.whichSlot(word.id);
+                let slot = await this.library.cardbox.whichSlot(word.id);
                 if (slot < 1) {
                     // new word
                     this.library.cardbox.insert(word.id, 1);
@@ -105,7 +105,7 @@ export default class WordPool {
             }
             let i : number = 0;
             while (i < this.pool.length) {
-                let slot = this.library.cardbox.whichSlot(this.pool[i].id);
+                let slot = await this.library.cardbox.whichSlot(this.pool[i].id);
                 if ((slot === 2 && count2 >= limit2) ||
                     (slot === 3 && count3 >= limit3)) {
                     // word of slot 2 or 3, but limit is reached

@@ -5,6 +5,7 @@ import LibraryBookLoader from "./files/LibraryBookLoader.js";
 import LibraryIndexBookFileStructure from "./files/LibraryIndexBookFileStructure.js";
 import ObjectStorage from "../../storage/ObjectStorage.js";
 import Cardbox from "./Cardbox.js";
+import LibraryDB from "./LibraryDB.js";
 
 export default class Library {
     index : LibraryIndex;
@@ -15,7 +16,7 @@ export default class Library {
     private unsealedBooks : string[] = [];
     private storage : ObjectStorage;
 
-    constructor() {
+    constructor(private db : LibraryDB) {
         this.storage = new ObjectStorage(
             this, [
                 {
@@ -31,7 +32,7 @@ export default class Library {
             ], "library"
         )
         this.storage.load();
-        this.cardbox = new Cardbox();
+        this.cardbox = new Cardbox(db);
     }
 
     /**
@@ -157,6 +158,7 @@ export default class Library {
     /**
      * Unseals the book with the given id. Unsealing a book will add all
      * the words of the book to the first slot of the cardbox.
+     * Note: this also affects words with the same id from different books.
      * @param id 
      */
     unsealBook(id : string) {
@@ -164,10 +166,8 @@ export default class Library {
         this.storage.save();
         this.getBook(id).then((book : LibraryBook) => {
             for(const word of book.words) {
-                if (this.cardbox.whichSlot(word.id) < 1) {
-                    // word not yet in the cardbox
-                    this.cardbox.insert(word.id, 1);
-                }
+                // word not yet in the cardbox
+                this.cardbox.insert(word.id, 1);
             }
         });
     }
