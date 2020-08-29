@@ -1,5 +1,8 @@
 # Devlog
 
+## 2020-08-29
+- Updating cardbox to use `IndexedDB` instead of `localStorage`
+
 ## 2020-08-02
 - Added cardbox with 3 slots for spaced repetition
     - Each word can move up only once a day
